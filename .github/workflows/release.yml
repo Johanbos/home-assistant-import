@@ -15,5 +15,5 @@ jobs:
       - name: Dependencies
         run: npm clean-install
 
-      - name: Publish
-        run: npm run publish
+      - name: Make
+        run: npm run make

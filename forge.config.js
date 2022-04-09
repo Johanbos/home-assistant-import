@@ -1,4 +1,17 @@
 module.exports = {
+    publishers: [
+        {
+            name: '@electron-forge/publisher-github',
+            platforms: ['darwin', 'linux'],
+            config: {
+                repository: {
+                    owner: 'Johanbos',
+                    name: 'home-assistant-import'
+                },
+                prerelease: true
+            }
+        }
+    ],
     makers: [
         {
             "name": "@electron-forge/maker-squirrel",
@@ -21,18 +34,5 @@ module.exports = {
             "config": {}
         }
     ],
-    publishers: [
-        {
-            name: '@electron-forge/publisher-github',
-            platforms: ['darwin', 'linux'],
-            config: {
-                repository: {
-                    owner: 'Johanbos',
-                    name: 'home-assistant-import'
-                },
-                prerelease: true
-            }
-        }
-    ]
 }
 
