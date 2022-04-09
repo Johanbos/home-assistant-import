@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   release:
     runs-on: windows-latest
@@ -17,4 +20,3 @@ jobs:
 
       - name: Publish
         run: npm run publish
-        authToken: ${{ secrets.GITHUB_TOKEN }}
