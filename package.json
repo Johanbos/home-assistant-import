@@ -1,11 +1,11 @@
 {
-  "name": "naive-photo-dare-co7bu",
-  "productName": "naive-photo-dare-co7bu",
-  "description": "My Electron application description",
+  "name": "home-assistant-import",
+  "productName": "Home Assistant Import",
+  "description": "Home Assistant Import helps creating import scripts based on existing platforms like Domoticz.",
   "keywords": [],
   "main": "./main.js",
-  "version": "1.0.0",
-  "author": "johan",
+  "version": "0.0.1",
+  "author": "Johan Bos",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -23,30 +23,6 @@
     "electron-squirrel-startup": "^1.0.0"
   },
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "naive_photo_dare_co7bu"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+    "forge": "./forge.config.js"
   }
 }
