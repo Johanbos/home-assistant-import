@@ -1,4 +1,5 @@
 module.exports = {
+    packagerConfig: {},
     publishers: [
         {
             name: '@electron-forge/publisher-github',
