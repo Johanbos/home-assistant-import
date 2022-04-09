@@ -27,8 +27,8 @@ module.exports = {
             platforms: ['darwin', 'linux'],
             config: {
                 repository: {
-                    owner: 'Johan Bos',
-                    name: 'Home Assistant Import'
+                    owner: 'Johanbos',
+                    name: 'home-assistant-import'
                 },
                 prerelease: true
             }
