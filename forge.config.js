@@ -3,7 +3,7 @@ module.exports = {
         {
             "name": "@electron-forge/maker-squirrel",
             "config": {
-                "name": "naive_photo_dare_co7bu"
+                "name": "home-assistant-import"
             }
         },
         {
@@ -11,6 +11,14 @@ module.exports = {
             "platforms": [
                 "darwin"
             ]
+        },
+        {
+            "name": "@electron-forge/maker-deb",
+            "config": {}
+        },
+        {
+            "name": "@electron-forge/maker-rpm",
+            "config": {}
         }
     ],
     publishers: [
