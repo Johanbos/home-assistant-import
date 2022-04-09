@@ -21,5 +21,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: dependencies
+        run: npm install
+
       - name: make
         run: npm run make
