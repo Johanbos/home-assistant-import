@@ -17,3 +17,4 @@ jobs:
 
       - name: Publish
         run: npm run publish
+        authToken: ${{ secrets.GITHUB_TOKEN }}
