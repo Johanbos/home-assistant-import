@@ -2,14 +2,62 @@
   "name": "home-assistant-import",
   "productName": "Home Assistant Import",
   "description": "Home Assistant Import helps creating import scripts based on existing platforms like Domoticz.",
-  "keywords": [],
-  "main": "./main.js",
   "version": "0.0.1",
-  "author": "Johan Bos",
+  "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "Johan Bos",
+    "email": "johanbos-nl@outlook.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "my_app"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "Johanbos",
+              "name": "home-assistant-import"
+            },
+            "prerelease": true
+          }
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
@@ -17,13 +65,6 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
-    "@electron-forge/publisher-github": "^6.0.0-beta.63",
-    "electron": "16.0.6"
-  },
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
-  },
-  "config": {
-    "forge": "./forge.config.js"
+    "electron": "18.0.3"
   }
 }
