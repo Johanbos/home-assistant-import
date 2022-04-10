@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 
 try {
@@ -28,9 +28,23 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
+async function handleFileOpen() {
+  const { canceled, filePaths } = await dialog.showOpenDialog()
+  if (canceled) {
+    return
+  } else {
+    return filePaths[0]
+  }
+}
+
+const createEventsHandlers = () => {
+  ipcMain.handle('dialog:openFile', handleFileOpen);
+};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+app.on('ready', createEventsHandlers);
 app.on('ready', createWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
