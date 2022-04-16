@@ -32,12 +32,13 @@ jobs:
       - name: Determine Version
         uses: gittools/actions/gitversion/execute@v0.9.7
 
-      - task: Bash@3
-        displayName: 'Set version number in package.json'
+      - name: 'Set version number in package.json'
+        task: Bash@3
         inputs:
           targetType: 'inline'
           script: sed -i "s/0.0.1/$GITVERSION_SEMVER/g" package.json
         env:
           GITVERSION_SEMVER: $(GitVersion.SemVer)
+
       - name: Publish
         run: npm run publish
