@@ -11,10 +11,19 @@ document.getElementById('openFile').onclick = async (event) => {
 
 async function openFile(filePath) {
     const response = await window.electronAPI.openFile(filePath);
+    console.error(response.error);
+    console.log(response.entities);
+
     document.getElementById('message').innerHTML = response.message;
     document.getElementById('filePath').innerHTML = response.filePath;
-    console.error(response.error);
+    
+    var entityId = document.getElementById('entityId');
+    response.entities.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.EntityID;
+        option.text = `${element.DeviceName} (${element.TotalValues} values, from ${element.StartDate} with ${element.MinValues} to ${element.EndDate} with ${element.MaxValues})`;
+        console.log(element, option);
+        entityId.add(option);
+    });
 }
 
-// KickStart; do not check in
-openFile(`O:\\OneDrive Johan\\Documents\\Schepenen 8\\Domoticz\\test.db`);

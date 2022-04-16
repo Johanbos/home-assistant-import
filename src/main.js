@@ -73,7 +73,8 @@ class FileAnalyser {
     const domoticzDatabase = new DomoticzDatabase(this.filePath);
     if (domoticzDatabase.isMatch())
     {
-      return new FileAnalyserResponse(this.filePath, 'Found Domoticz', domoticzDatabase.error);
+      const entities = domoticzDatabase.entities();
+      return new FileAnalyserResponse(this.filePath, 'Found Domoticz', domoticzDatabase.error, entities);
     }
   
     return new FileAnalyserResponse(this.filePath, 'Unknown filetype', domoticzDatabase.error);
@@ -81,10 +82,11 @@ class FileAnalyser {
 }
 
 class FileAnalyserResponse {
-  constructor(filePath, message, error) {
+  constructor(filePath, message, error, entities) {
     this.filePath = filePath;
     this.message = message;
     this.error = error;
+    this.entities = entities;
   }
 }
 
@@ -110,19 +112,62 @@ class DomoticzDatabase {
       this.setupDatabase();
       const tablesSql = `SELECT name FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1`;
       const tables = this.database.prepare(tablesSql).all();
-      this.error = tables;
-      if (!tables.find((value) => { value.name == 'DeviceStatus' })) {
-        throw { message: 'could not find DeviceStatus table', tables };
+      const tablesNeeded = ['DeviceStatus', 'Hardware', 'Meter_Calendar'];
+      if (!tablesNeeded.every((tableName) => { return tables.find((value) => { return value.name == tableName }) })) {
+        throw { message: 'Could not find all Domoticz tables', tablesNeeded, tables };
       }
-
-
-      //const valuesSql = `select * from DeviceStatus`;
-      //const values = this.database.prepare(valuesSql).all();
-      //this.error = values;
-      return false;
+      return true;
     } catch (error) {
       this.error = error;
       return false;
     }
+  }
+
+  entities() {
+    const entitiesSql = 
+      `select m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
+ from Meter_Calendar m 
+ left join DeviceStatus d on d.ID = m.DeviceRowID
+ left join Hardware h on h.ID = d.HardwareID
+ group by m.DeviceRowID
+
+ union all
+
+ select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
+ from MultiMeter_Calendar m 
+ left join DeviceStatus d on d.ID = m.DeviceRowID
+ left join Hardware h on h.ID = d.HardwareID
+ where m.Counter1 <> 0
+ group by DeviceRowID
+
+ union all
+
+ select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
+ from MultiMeter_Calendar m 
+ left join DeviceStatus d on d.ID = m.DeviceRowID
+ left join Hardware h on h.ID = d.HardwareID
+ where m.Counter2 <> 0
+ group by DeviceRowID
+
+ union all
+
+ select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
+ from MultiMeter_Calendar m 
+ left join DeviceStatus d on d.ID = m.DeviceRowID
+ left join Hardware h on h.ID = d.HardwareID
+ where m.Counter3 <> 0
+ group by DeviceRowID
+
+ union all
+
+ select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
+ from MultiMeter_Calendar m 
+ left join DeviceStatus d on d.ID = m.DeviceRowID
+ left join Hardware h on h.ID = d.HardwareID
+ where m.Counter4 <> 0
+ group by DeviceRowID
+ `;
+    const entities = this.database.prepare(entitiesSql).all();
+    return entities;
   }
 }
