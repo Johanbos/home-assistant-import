@@ -4,7 +4,7 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-document.getElementById('analyze').onclick = async (event) => {
+document.getElementById('openFile').onclick = async (event) => {
     event.preventDefault();
     const filePath = await window.electronAPI.openFile();
     console.log(filePath);

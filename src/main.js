@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const Database = require('better-sqlite3');
 
 try {
 	require('electron-reloader')(module);
@@ -23,17 +24,25 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '/index.html'));
-
+  console.log('hello world');
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
 
 async function handleFileOpen() {
-  const { canceled, filePaths } = await dialog.showOpenDialog()
+  const { canceled, filePaths } = await dialog.showOpenDialog();
+  console.log('filePaths', filePaths);
   if (canceled) {
     return
   } else {
-    return filePaths[0]
+    const db = new Database(filePaths[0], { verbose: console.log });
+    const result = db.prepare(
+    `SELECT * FROM sqlite_schema 
+WHERE type IN ('table','view') 
+--AND name NOT LIKE 'sqlite_%'
+ORDER BY 1;`).all();
+    console.log(result);
+  return result;
   }
 }
 
