@@ -13,7 +13,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -22,39 +21,10 @@ const createWindow = () => {
     }
   });
 
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '/index.html'));
-  console.log('hello world');
-  // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  
 };
-
-async function handleFileOpen() {
-  const { canceled, filePaths } = await dialog.showOpenDialog();
-  console.log('filePaths', filePaths);
-  if (canceled) {
-    return
-  } else {
-    const db = new Database(filePaths[0], { verbose: console.log });
-    const result = db.prepare(
-    `SELECT * FROM sqlite_schema 
-WHERE type IN ('table','view') 
---AND name NOT LIKE 'sqlite_%'
-ORDER BY 1;`).all();
-    console.log(result);
-  return result;
-  }
-}
-
-const createEventsHandlers = () => {
-  ipcMain.handle('dialog:openFile', handleFileOpen);
-};
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createEventsHandlers);
-app.on('ready', createWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -72,3 +42,71 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', createWindow);
+app.on('ready', () => {
+  ipcMain.handle('dialog:openFile', handleFileOpen);
+});
+
+async function handleFileOpen(event, filePath) {
+  if (!filePath) {
+    const { canceled, filePaths } = await dialog.showOpenDialog();
+    if (canceled) {
+      return;
+    }
+    filePath = filePaths[0];
+  }
+
+  const fileAnalyser = new FileAnalyser(filePath);
+  return fileAnalyser.analyze();
+}
+
+class FileAnalyser {
+  constructor(filePath) {
+    this.filePath = filePath;
+  }
+
+  analyze() {
+    let domoticzDatabase = new DomoticzDatabase(this.filePath);
+    if (domoticzDatabase.isMatch())
+    {
+      return 'Domoticz';
+    }
+  
+    return 'Unknown filetype: ' + this.filePath + ' with error: ' + domoticzDatabase.error;
+  }
+}
+
+class DomoticzDatabase {
+  constructor(filePath) {
+    this.filePath = filePath;
+  }
+
+  setupDatabase() {
+    if (!this.filePath) {
+      throw 'no file path';
+    }
+
+    if (!this.filePath.endsWith('.db')) {
+      throw 'not ending with .db'
+    }
+
+    this.database = new Database(this.filePath, { verbose: console.log });
+  }
+
+  isMatch() {
+    try {
+      this.setupDatabase();
+      const tableSql = `SELECT * FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1`;
+      const result = this.database.prepare(tableSql).all();
+      console.log(result);
+      return true;
+    } catch (error) {
+      this.error = error;
+      return false;
+    }
+  }
+}

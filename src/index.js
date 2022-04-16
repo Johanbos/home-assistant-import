@@ -14,4 +14,3 @@ async function openFile(filePath) {
     const message = await window.electronAPI.openFile(filePath);
     document.getElementById('message').innerHTML = message;
 }
-
