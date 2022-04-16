@@ -70,13 +70,21 @@ class FileAnalyser {
   }
 
   analyze() {
-    let domoticzDatabase = new DomoticzDatabase(this.filePath);
+    const domoticzDatabase = new DomoticzDatabase(this.filePath);
     if (domoticzDatabase.isMatch())
     {
-      return 'Domoticz';
+      return new FileAnalyserResponse(this.filePath, 'Found Domoticz', domoticzDatabase.error);
     }
   
-    return 'Unknown filetype: ' + this.filePath + ' with error: ' + domoticzDatabase.error;
+    return new FileAnalyserResponse(this.filePath, 'Unknown filetype', domoticzDatabase.error);
+  }
+}
+
+class FileAnalyserResponse {
+  constructor(filePath, message, error) {
+    this.filePath = filePath;
+    this.message = message;
+    this.error = error;
   }
 }
 
@@ -100,10 +108,18 @@ class DomoticzDatabase {
   isMatch() {
     try {
       this.setupDatabase();
-      const tableSql = `SELECT * FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1`;
-      const result = this.database.prepare(tableSql).all();
-      console.log(result);
-      return true;
+      const tablesSql = `SELECT name FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1`;
+      const tables = this.database.prepare(tablesSql).all();
+      this.error = tables;
+      if (!tables.find((value) => { value.name == 'DeviceStatus' })) {
+        throw { message: 'could not find DeviceStatus table', tables };
+      }
+
+
+      //const valuesSql = `select * from DeviceStatus`;
+      //const values = this.database.prepare(valuesSql).all();
+      //this.error = values;
+      return false;
     } catch (error) {
       this.error = error;
       return false;
