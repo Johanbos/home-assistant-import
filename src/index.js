@@ -6,6 +6,12 @@
 // process.
 document.getElementById('openFile').onclick = async (event) => {
     event.preventDefault();
-    const filePath = await window.electronAPI.openFile();
-    console.log(filePath);
+    openFile();
+    
 }
+
+async function openFile(filePath) {
+    const message = await window.electronAPI.openFile(filePath);
+    document.getElementById('message').innerHTML = message;
+}
+
