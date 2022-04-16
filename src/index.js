@@ -27,3 +27,5 @@ async function openFile(filePath) {
     });
 }
 
+// KickStart; do not check in
+openFile(`O:\\OneDrive Johan\\Documents\\Schepenen 8\\Domoticz\\test.db`);
