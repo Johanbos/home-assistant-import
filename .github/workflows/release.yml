@@ -36,7 +36,7 @@ jobs:
         displayName: 'Set version number in package.json'
         inputs:
           targetType: 'inline'
-          script: sed -i "s/0.0.1/$GITVERSIONNUMBER/g" package.json
+          script: sed -i "s/0.0.1/$GITVERSION_SEMVER/g" package.json
         env:
           GITVERSION_SEMVER: $(GitVersion.SemVer)
       - name: Publish
