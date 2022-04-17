@@ -7,11 +7,11 @@ class DomoticzDatabase {
 
     setupDatabase() {
         if (!this.filePath) {
-            throw 'no file path';
+            throw { message: 'No file path' };
         }
 
         if (!this.filePath.endsWith('.db')) {
-            throw 'not ending with .db'
+            throw { message: 'Not ending with .db', filePath: this.filePath }
         }
 
         this.database = new Database(this.filePath, { verbose: console.log });

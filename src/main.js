@@ -1,8 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const FileAnalyser = require('./fileAnalyser.js'); 
-console.log(BrowserWindow);
-console.log(FileAnalyser);
 
 try {
 	require('electron-reloader')(module);

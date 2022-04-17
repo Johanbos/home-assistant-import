@@ -1,4 +1,5 @@
 const DomoticzDatabase = require('./domoticzDatabase.js');
+const SmaCsvExport = require('./smaCsvExport.js');
 
 class FileAnalyser {
     constructor(filePath) {
@@ -12,7 +13,13 @@ class FileAnalyser {
             return new FileAnalyserResponse(this.filePath, 'Found Domoticz', domoticzDatabase.error, entities);
         }
 
-        return new FileAnalyserResponse(this.filePath, 'Unknown filetype', domoticzDatabase.error);
+        const smaCsvExport = new SmaCsvExport(this.filePath);
+        if (smaCsvExport.isMatch()) {
+            const entities = smaCsvExport.entities();
+            return new FileAnalyserResponse(this.filePath, 'Found SMA CSV Export', smaCsvExport.error, entities);
+        }
+
+        return new FileAnalyserResponse(this.filePath, 'Unknown filetype', smaCsvExport.error);
     }
 }
 
