@@ -4,6 +4,7 @@
   "description": "Home Assistant Import helps creating import scripts based on existing platforms like Domoticz.",
   "version": "0.0.1",
   "main": "src/main.js",
+  "type": "commonjs",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
