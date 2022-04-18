@@ -1,5 +1,6 @@
 const SyncParser = require('csv-parse/sync');
 const fs = require('fs');
+const Statistics = require('./statistics');
 
 class deviceSma {
     constructor(filePath) {
@@ -37,7 +38,7 @@ class deviceSma {
             if (this.data.length == 0) {
                 throw { message: 'No records in data' };
             }
-            throw { message: 'No records in data' };
+
             return true;
         } catch (error) {
             console.error(error);
@@ -47,7 +48,22 @@ class deviceSma {
     }
 
     entities() {
-        this.data.length
+        const first = this.data[0];
+        const last = this.data[this.data.length-1];
+        console.log(first);
+        console.log(last);
+        const startDate = this.transformDate(first[0]);
+        const endDate = this.transformDate(last[0]);
+        const totalValues = this.data.length;
+        const minValues = parseInt(first[1]);
+        const maxValues = parseInt(last[1]);
+        const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
+        return entities;
+    }
+
+    transformDate(dateStr) {
+        const result = `${dateStr.substr(6, 4)}-${dateStr.substr(3, 2)}-${dateStr.substr(0, 2)}`;
+        return result;
     }
 }
 

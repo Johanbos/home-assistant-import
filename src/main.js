@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, session } = require('electron');
 const path = require('path');
 const Matcher = require('./core/matcher.js'); 
 
@@ -48,6 +48,15 @@ app.on('activate', () => {
 app.on('ready', createWindow);
 app.on('ready', () => {
   ipcMain.handle('dialog:openFile', handleFileOpen);
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': ['script-src \'self\'']
+      }
+    })
+  });  
 });
 
 async function handleFileOpen(event, filePath) {
