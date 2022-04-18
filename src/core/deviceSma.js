@@ -1,7 +1,7 @@
 const SyncParser = require('csv-parse/sync');
 const fs = require('fs');
 
-class SmaCsvExport {
+class deviceSma {
     constructor(filePath) {
         this.filePath = filePath;
     }
@@ -37,7 +37,7 @@ class SmaCsvExport {
             if (this.data.length == 0) {
                 throw { message: 'No records in data' };
             }
-
+            throw { message: 'No records in data' };
             return true;
         } catch (error) {
             console.error(error);
@@ -47,8 +47,8 @@ class SmaCsvExport {
     }
 
     entities() {
-
+        this.data.length
     }
 }
 
-module.exports = SmaCsvExport;
+module.exports = deviceSma;

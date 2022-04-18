@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 
-class DomoticzDatabase {
+class DeviceDomotics {
     constructor(filePath) {
         this.filePath = filePath;
     }
@@ -82,4 +82,4 @@ class DomoticzDatabase {
     }
 }
 
-module.exports = DomoticzDatabase;
+module.exports = DeviceDomotics;

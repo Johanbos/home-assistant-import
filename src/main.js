@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const FileAnalyser = require('./fileAnalyser.js'); 
+const Matcher = require('./core/matcher.js'); 
 
 try {
 	require('electron-reloader')(module);
@@ -21,7 +21,7 @@ const createWindow = () => {
     }
   });
 
-  mainWindow.loadFile(path.join(__dirname, '/index.html'));
+  mainWindow.loadFile(path.join(__dirname, '/ui/index.html'));
   mainWindow.webContents.openDevTools();
 };
 
@@ -59,6 +59,6 @@ async function handleFileOpen(event, filePath) {
     filePath = filePaths[0];
   }
 
-  const fileAnalyser = new FileAnalyser(filePath);
-  return fileAnalyser.analyze();
+  const matcher = new Matcher(filePath);
+  return matcher.match();
 }
