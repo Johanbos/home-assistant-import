@@ -7,7 +7,7 @@ class deviceSma {
         this.filePath = filePath;
     }
 
-    parse() {
+    async parse() {
         if (!this.filePath) {
             throw { message: 'No file path' };
         }
@@ -23,9 +23,9 @@ class deviceSma {
         });
     }
 
-    isMatch() {
+    async isMatch() {
         try {
-            this.parse();
+            await this.parse();
             const header = 'Version CSV3|Tool WebUI|Linebreaks CR/LF|Delimiter comma';
             if (!this.rawData.includes(header)) {
                 throw { message: 'Missing header', header };
@@ -47,13 +47,11 @@ class deviceSma {
         }
     }
 
-    entities() {
+    async entities() {
         const first = this.data[0];
         const last = this.data[this.data.length-1];
-        console.log(first);
-        console.log(last);
-        const startDate = this.transformDate(first[0]);
-        const endDate = this.transformDate(last[0]);
+        const startDate = this.transformDateTime(first[0]);
+        const endDate = this.transformDateTime(last[0]);
         const totalValues = this.data.length;
         const minValues = parseInt(first[1]);
         const maxValues = parseInt(last[1]);
@@ -61,9 +59,19 @@ class deviceSma {
         return entities;
     }
 
-    transformDate(dateStr) {
-        const result = `${dateStr.substr(6, 4)}-${dateStr.substr(3, 2)}-${dateStr.substr(0, 2)}`;
+    transformDateTime(dateStr) {
+        const result = `${dateStr.substr(6, 4)}-${dateStr.substr(3, 2)}-${dateStr.substr(0, 2)} ${dateStr.substr(11, 8)}`;
         return result;
+    }
+
+    async script(entityId = null, metadata_id = null) {
+        // sma always has 1 entity in export
+        var statistics = new Statistics();
+        this.data.forEach(element => {
+            statistics.add(metadata_id, this.transformDateTime(element[0]), parseInt(element[1]));
+        }); 
+
+        return statistics.getScript();
     }
 }
 

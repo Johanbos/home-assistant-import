@@ -17,7 +17,7 @@ class DeviceDomotics {
         this.database = new Database(this.filePath, { verbose: console.log });
     }
 
-    isMatch() {
+    async isMatch() {
         try {
             this.setupDatabase();
             const tablesSql = `SELECT name FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1`;
@@ -33,7 +33,7 @@ class DeviceDomotics {
         }
     }
 
-    entities() {
+    async entities() {
         const entitiesSql =
             `select m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
    from Meter_Calendar m 
@@ -79,6 +79,10 @@ class DeviceDomotics {
    `;
         const entities = this.database.prepare(entitiesSql).all();
         return entities;
+    }
+
+    async script(entityId) {
+        console.log('sma script', entityId);
     }
 }
 

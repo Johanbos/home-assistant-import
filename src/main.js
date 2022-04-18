@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog, session } = require('electron');
 const path = require('path');
-const Matcher = require('./core/matcher.js'); 
+const Devices = require('./core/devices.js'); 
 
 try {
 	require('electron-reloader')(module);
@@ -47,7 +47,6 @@ app.on('activate', () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 app.on('ready', () => {
-  ipcMain.handle('dialog:openFile', handleFileOpen);
   ipcMain.handle('createImport', createImport);
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
@@ -59,7 +58,7 @@ app.on('ready', () => {
   });  
 });
 
-async function handleFileOpen(event, filePath) {
+async function createImport(event, filePath, entityId) {
   if (!filePath) {
     const { canceled, filePaths } = await dialog.showOpenDialog();
     if (canceled) {
@@ -68,11 +67,6 @@ async function handleFileOpen(event, filePath) {
     filePath = filePaths[0];
   }
 
-  const matcher = new Matcher(filePath);
-  return matcher.match();
-}
-
-async function createImport(event, entityId) {
-  console.log('createImport', entityId);
-  return { nice: true};
+  const devices = new Devices(filePath);
+  return await devices.createImport(entityId);
 }
