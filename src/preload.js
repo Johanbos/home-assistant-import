@@ -3,5 +3,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    openFile: (filePath) => ipcRenderer.invoke('dialog:openFile', filePath)
+    openFile: (filePath) => ipcRenderer.invoke('dialog:openFile', filePath),
+    createImport: (entityId) => ipcRenderer.invoke('createImport', entityId)
 })

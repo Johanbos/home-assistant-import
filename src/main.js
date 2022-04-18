@@ -48,7 +48,7 @@ app.on('activate', () => {
 app.on('ready', createWindow);
 app.on('ready', () => {
   ipcMain.handle('dialog:openFile', handleFileOpen);
-
+  ipcMain.handle('createImport', createImport);
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -70,4 +70,9 @@ async function handleFileOpen(event, filePath) {
 
   const matcher = new Matcher(filePath);
   return matcher.match();
+}
+
+async function createImport(event, entityId) {
+  console.log('createImport', entityId);
+  return { nice: true};
 }

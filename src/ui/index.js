@@ -9,6 +9,12 @@ document.getElementById('openFile').onclick = async (event) => {
     openFile();
 }
 
+document.getElementById('createImport').onclick = async (event) => {
+    event.preventDefault();
+    const entityId = document.getElementById('entityId').value;
+    createImport(entityId);
+}
+
 async function openFile(filePath) {
     const response = await window.electronAPI.openFile(filePath);
     document.getElementById('message').innerHTML = response.message;
@@ -29,6 +35,11 @@ async function openFile(filePath) {
             entityId.add(option);
         });
     }
+}
+
+async function createImport(entityId) {
+    const response = await window.electronAPI.createImport(entityId);
+    console.log(response);
 }
 
 // KickStart; 
