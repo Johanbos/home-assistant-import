@@ -48,15 +48,20 @@ class deviceSma {
     }
 
     async entities() {
-        const first = this.data[0];
-        const last = this.data[this.data.length-1];
-        const startDate = this.transformDateTime(first[0]);
-        const endDate = this.transformDateTime(last[0]);
-        const totalValues = this.data.length;
-        const minValues = parseInt(first[1]);
-        const maxValues = parseInt(last[1]);
-        const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
-        return entities;
+        try
+        {
+            const first = this.data[0];
+            const last = this.data[this.data.length-1];
+            const startDate = this.transformDateTime(first[0]);
+            const endDate = this.transformDateTime(last[0]);
+            const totalValues = this.data.length;
+            const minValues = parseInt(first[1]);
+            const maxValues = parseInt(last[1]);
+            const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
+            return entities;
+        } catch (error) {
+            this.error = error;
+        }
     }
 
     transformDateTime(dateStr) {
@@ -64,14 +69,19 @@ class deviceSma {
         return result;
     }
 
-    async script(entityId = null, metadata_id = null) {
-        // sma always has 1 entity in export
-        var statistics = new Statistics();
-        this.data.forEach(element => {
-            statistics.add(metadata_id, this.transformDateTime(element[0]), parseInt(element[1]));
-        }); 
+    async script(metadata_id, entityId = null, ) {
+        try
+        {
+            // sma always has 1 entity in export
+            var statistics = new Statistics();
+            this.data.forEach(element => {
+                statistics.add(metadata_id, this.transformDateTime(element[0]), parseInt(element[1]));
+            }); 
 
-        return statistics.getScript();
+            return statistics.getScript();
+        } catch (error) {
+            this.error = error;
+        }
     }
 }
 

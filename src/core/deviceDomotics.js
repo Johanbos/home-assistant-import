@@ -34,55 +34,64 @@ class DeviceDomotics {
     }
 
     async entities() {
-        const entitiesSql =
-            `select m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
-   from Meter_Calendar m 
-   left join DeviceStatus d on d.ID = m.DeviceRowID
-   left join Hardware h on h.ID = d.HardwareID
-   group by m.DeviceRowID
-  
-   union all
-  
-   select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
-   from MultiMeter_Calendar m 
-   left join DeviceStatus d on d.ID = m.DeviceRowID
-   left join Hardware h on h.ID = d.HardwareID
-   where m.Counter1 <> 0
-   group by DeviceRowID
-  
-   union all
-  
-   select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
-   from MultiMeter_Calendar m 
-   left join DeviceStatus d on d.ID = m.DeviceRowID
-   left join Hardware h on h.ID = d.HardwareID
-   where m.Counter2 <> 0
-   group by DeviceRowID
-  
-   union all
-  
-   select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
-   from MultiMeter_Calendar m 
-   left join DeviceStatus d on d.ID = m.DeviceRowID
-   left join Hardware h on h.ID = d.HardwareID
-   where m.Counter3 <> 0
-   group by DeviceRowID
-  
-   union all
-  
-   select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
-   from MultiMeter_Calendar m 
-   left join DeviceStatus d on d.ID = m.DeviceRowID
-   left join Hardware h on h.ID = d.HardwareID
-   where m.Counter4 <> 0
-   group by DeviceRowID
-   `;
-        const entities = this.database.prepare(entitiesSql).all();
-        return entities;
+        try {
+
+            const entitiesSql =
+`select m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
+from Meter_Calendar m 
+left join DeviceStatus d on d.ID = m.DeviceRowID
+left join Hardware h on h.ID = d.HardwareID
+group by m.DeviceRowID
+
+union all
+
+select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
+from MultiMeter_Calendar m 
+left join DeviceStatus d on d.ID = m.DeviceRowID
+left join Hardware h on h.ID = d.HardwareID
+where m.Counter1 <> 0
+group by DeviceRowID
+
+union all
+
+select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
+from MultiMeter_Calendar m 
+left join DeviceStatus d on d.ID = m.DeviceRowID
+left join Hardware h on h.ID = d.HardwareID
+where m.Counter2 <> 0
+group by DeviceRowID
+
+union all
+
+select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
+from MultiMeter_Calendar m 
+left join DeviceStatus d on d.ID = m.DeviceRowID
+left join Hardware h on h.ID = d.HardwareID
+where m.Counter3 <> 0
+group by DeviceRowID
+
+union all
+
+select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
+from MultiMeter_Calendar m 
+left join DeviceStatus d on d.ID = m.DeviceRowID
+left join Hardware h on h.ID = d.HardwareID
+where m.Counter4 <> 0
+group by DeviceRowID
+`;
+            const entities = this.database.prepare(entitiesSql).all();
+            return entities;
+        } catch (error) {
+            this.error = error;
+        }
     }
 
     async script(entityId) {
-        console.log('sma script', entityId);
+        try {
+            console.log('sma script', entityId);
+        } catch (error) {
+            this.error = error;
+        }
     }
 }
 

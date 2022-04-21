@@ -6,12 +6,12 @@ class Devices {
         this.filePath = filePath;
     }
 
-    async createImport(entityId, metadata_id) {
+    async createImport(metadata_id, entityId) {
         const deviceDomotics = new DeviceDomotics(this.filePath);
         if (await deviceDomotics.isMatch()) {
             const entities = await deviceDomotics.entities();
             const selectedEntityId = entityId ?? entities.at(0).EntityID;
-            const script = await deviceDomotics.script(selectedEntityId, metadata_id);
+            const script = await deviceDomotics.script(metadata_id, selectedEntityId);
             return new ImportResponse(this.filePath, 'Found Domoticz', deviceDomotics.error, entities, selectedEntityId, script);
         }
 
@@ -19,7 +19,7 @@ class Devices {
         if (await deviceSma.isMatch()) {
             const entities = await deviceSma.entities();
             const selectedEntityId = entityId ?? entities.at(0).EntityID;
-            const script = await deviceSma.script(selectedEntityId, metadata_id);
+            const script = await deviceSma.script(metadata_id, selectedEntityId);
             return new ImportResponse(this.filePath, 'Found SMA CSV Export', deviceSma.error, entities, selectedEntityId, script);
         }
         const errors = { deviceSmaError: deviceSma.error, deviceDomoticsError: deviceDomotics.error };

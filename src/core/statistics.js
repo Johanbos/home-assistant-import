@@ -6,15 +6,27 @@ class Statistics {
     }
 
     add(metadata_id, date, value) {
-        var sum = this.lastStatistic ? value - this.lastStatistic.state : 0;
-        const statistic = new Statistic(metadata_id, date, date, value, sum)
+        var sum = 0; 
+        if (this.lastStatistic) {
+            if (this.lastStatistic.state > value) {
+                throw { message: 'Added value cannot be smaller then previous value', previousValue: this.lastStatistic.state, value }
+            }
+
+            if (this.lastStatistic.start > date) {
+                throw { message: 'Added date cannot be before previous date', previousDate: this.lastStatistic.start, date }
+            }
+
+            sum = this.lastStatistic.sum + (value - this.lastStatistic.state);
+        }
+
+        const statistic = new Statistic(metadata_id, date, date, value, sum);
         this.data.push(statistic);
         this.lastStatistic = statistic;
     }
   
     getScript() {
-        const deleteSql = `delete from statistics where created <= "${this.lastStatistic.created}"\n\n`;
-        const updateSql = `update statistics set sum = sum + 0 where created > "${this.lastStatistic.created}"\n\n`;
+        const deleteSql = `delete from statistics where metadata_id = ${this.lastStatistic.metadata_id} and created <= "${this.lastStatistic.created}"\n\n`;
+        const updateSql = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${this.lastStatistic.metadata_id} and created > "${this.lastStatistic.created}"\n\n`;
         const insertSql = 'insert into statistics (created, start, state, sum, metadata_id) values\n';
         var resultSql = [];
         this.data.forEach(element => {

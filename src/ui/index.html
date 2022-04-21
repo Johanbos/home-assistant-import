@@ -7,6 +7,11 @@
   </head>
   <body>
     <h1>Home Assistant Import</h1>
+      <h2>Install & open SQLite Web</h2>
+      Install <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>
+      and run this query to find out the Id of the sensor.
+      <textarea>SELECT id, statistic_id, unit_of_measurement FROM "statistics_meta"</textarea>
+      <input id="metadataId" type="number" value="1" />
       <h2>Select a file to analyze</h2>
       <button id="openFile">Open file</button>
       <div>

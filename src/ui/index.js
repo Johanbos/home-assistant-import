@@ -11,8 +11,21 @@ document.getElementById('openFile').onclick = async (event) => {
     openFile();
 }
 
-async function openFile(filePath = '') {
-    const response = await window.electronAPI.createImport(filePath);
+document.getElementById('entityId').onchange = async (event) => {
+    event.preventDefault();
+    openFile();
+}
+
+document.getElementById('metadataId').onchange = async (event) => {
+    event.preventDefault();
+    openFile();
+}
+
+async function openFile(filePath = null) {
+    const filePath2 = filePath ?? document.getElementById('filePath').innerHTML;
+    const metadata_id = document.getElementById('metadataId').value;
+    const entityId = document.getElementById('entityId').value;
+    const response = await window.electronAPI.createImport(filePath2, metadata_id, entityId);
     console.log('openFile', response);
     document.getElementById('message').innerHTML = response.message;
     document.getElementById('filePath').innerHTML = response.filePath;
@@ -38,15 +51,6 @@ async function openFile(filePath = '') {
             entityIdElement.add(option);
         });
     }
-}
-
-document.getElementById('entityId').onchange = async (event) => {
-    event.preventDefault();
-    const filePath = document.getElementById('filePath').innerHTML;
-    const entityId = document.getElementById('entityId').value;
-    const response = await window.electronAPI.createImport(filePath, entityId);
-    console.log('onchange', response);
-    document.getElementById('result').innerText = response.script;
 }
 
 // KickStart; 
