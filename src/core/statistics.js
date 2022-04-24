@@ -33,7 +33,7 @@ class Statistics {
         this.data.forEach(element => {
             resultSql.push(`("${element.created}", "${element.start}", ${element.state}, ${element.sum}, ${element.metadata_id})`);
         });
-        return deleteSql + updateSql1, updateSql2 + insertSql + resultSql.join(',\n');
+        return deleteSql + updateSql1 + updateSql2 + insertSql + resultSql.join(',\n');
     }
 }
 
