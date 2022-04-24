@@ -26,13 +26,14 @@ class Statistics {
   
     getScript() {
         const deleteSql = `delete from statistics where metadata_id = ${this.lastStatistic.metadata_id} and created <= "${this.lastStatistic.created}"\n\n`;
-        const updateSql = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${this.lastStatistic.metadata_id} and created > "${this.lastStatistic.created}"\n\n`;
+        const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${this.lastStatistic.metadata_id} and start > "${this.lastStatistic.start}"\n\n`;
+        const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${this.lastStatistic.metadata_id} and start > "${this.lastStatistic.start}"\n\n`;
         const insertSql = 'insert into statistics (created, start, state, sum, metadata_id) values\n';
         var resultSql = [];
         this.data.forEach(element => {
             resultSql.push(`("${element.created}", "${element.start}", ${element.state}, ${element.sum}, ${element.metadata_id})`);
         });
-        return deleteSql + updateSql + insertSql + resultSql.join(',\n');
+        return deleteSql + updateSql1, updateSql2 + insertSql + resultSql.join(',\n');
     }
 }
 
