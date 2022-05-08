@@ -13,19 +13,18 @@ document.getElementById('openFile').onclick = async (event) => {
 
 document.getElementById('entityId').onchange = async (event) => {
     event.preventDefault();
-    openFile();
+    openFile(document.getElementById('filePath').innerHTML);
 }
 
 document.getElementById('metadataId').onchange = async (event) => {
     event.preventDefault();
-    openFile();
+    openFile(document.getElementById('filePath').innerHTML);
 }
 
 async function openFile(filePath = null) {
-    const filePath2 = filePath ?? document.getElementById('filePath').innerHTML;
     const metadata_id = document.getElementById('metadataId').value;
     const entityId = document.getElementById('entityId').value;
-    const response = await window.electronAPI.createImport(filePath2, metadata_id, entityId);
+    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId);
     console.log('openFile', response);
     document.getElementById('message').innerHTML = response.message;
     document.getElementById('filePath').innerHTML = response.filePath;
@@ -55,4 +54,4 @@ async function openFile(filePath = null) {
 
 // KickStart; 
 //openFile(`C:\\Users\\johan\\Desktop\\test.db`);
-openFile(`C:\\Users\\johan\\Desktop\\SUNNY_TRIPOWER_4.0_3006315744_Daily_2022_03_25_10_34_25.csv`);
+openFile(`C:\\Users\\johan\\Desktop\\SUNNY_TRIPOWER_4.0_3006315744_Daily_2022_05_08_08_15_01.csv`);
