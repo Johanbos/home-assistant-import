@@ -27,6 +27,7 @@ class DeviceDomotics {
             if (!tablesNeeded.every((tableName) => { return tables.find((value) => { return value.name == tableName }) })) {
                 throw { message: 'Could not find all Domoticz tables', tablesNeeded, tables };
             }
+
             return true;
         } catch (error) {
             this.error = error;
@@ -35,9 +36,7 @@ class DeviceDomotics {
     }
 
     async entities() {
-        try {
-
-            const entitiesSql =
+        const entitiesSql =
 `select m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
 from Meter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
@@ -46,7 +45,7 @@ group by m.DeviceRowID
 
 union all
 
-select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
+select 'mm1-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -55,7 +54,7 @@ group by DeviceRowID
 
 union all
 
-select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
+select 'mm2-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -64,7 +63,7 @@ group by DeviceRowID
 
 union all
 
-select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
+select 'mm3-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -73,27 +72,35 @@ group by DeviceRowID
 
 union all
 
-select m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
+select 'mm4-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
 where m.Counter4 <> 0
 group by DeviceRowID
 `;
-            const entities = this.database.prepare(entitiesSql).all();
-            return entities;
-        } catch (error) {
-            this.error = error;
-        }
+        const entities = this.database.prepare(entitiesSql).all();
+        return entities;
     }
 
-    async getStatistics(entityId) {
-        try {
-            var statistics = new Statistics();
-            return statistics;
-        } catch (error) {
-            this.error = error;
-        }
+    async getStatistics(metadata_id, entityId, transformValueMode) {
+        var statistics = new Statistics();
+        const sql = `select Date, Counter from Meter_Calendar where DeviceRowID = '${ entityId }' order by Date asc`
+        const records = this.database.prepare(sql).all();
+        records.forEach(record => {
+            let counter = record.Counter;
+            switch(transformValueMode) {
+                case 'devide1000':
+                    counter = record.Counter / 1000;
+                  break; 
+                case 'multiply1000':
+                    counter = record.Counter * 1000;
+                  break;
+            } 
+            
+            statistics.add(metadata_id, record.Date + ' 02:00:00.000000', counter);
+        });
+        return statistics;
     }
 }
 
