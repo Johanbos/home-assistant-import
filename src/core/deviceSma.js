@@ -39,6 +39,29 @@ class deviceSma {
                 throw { message: 'No records in data' };
             }
 
+            const first = this.data[0];
+            const last = this.data[this.data.length-1];
+            const startDate = this.transformDateTime(first[0]);
+            const endDate = this.transformDateTime(last[0]);
+            const minValues = this.transformValue(first[1]);
+            const maxValues = this.transformValue(last[1]);
+
+            if (!startDate) {
+                throw { message: 'No startDate in data', first };
+            }
+
+            if (!endDate) {
+                throw { message: 'No endDate in data', last };
+            }
+
+            if (!minValues && minValues !== 0) {
+                throw { message: 'No minValues in data', first };
+            }
+
+            if (!maxValues) {
+                throw { message: 'No maxValues in data', last };
+            }
+
             return true;
         } catch (error) {
             console.error(error);
@@ -55,8 +78,8 @@ class deviceSma {
             const startDate = this.transformDateTime(first[0]);
             const endDate = this.transformDateTime(last[0]);
             const totalValues = this.data.length;
-            const minValues = parseInt(first[1]);
-            const maxValues = parseInt(last[1]);
+            const minValues = this.transformValue(first[1]);
+            const maxValues = this.transformValue(last[1]);
             const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
             return entities;
         } catch (error) {
@@ -69,13 +92,21 @@ class deviceSma {
         return result;
     }
 
+    transformValue(valueStr) {
+        let valueWh = parseInt(valueStr);
+        let valuekWh = valueWh / 1000;
+        return valuekWh;
+    }
+
     async script(metadata_id, entityId = null, ) {
         try
         {
             // sma always has 1 entity in export
             var statistics = new Statistics();
             this.data.forEach(element => {
-                statistics.add(metadata_id, this.transformDateTime(element[0]), parseInt(element[1]));
+                let created = this.transformDateTime(element[0]);
+                let valuekWh = this.transformValue(element[1]);
+                statistics.add(metadata_id, created, valuekWh);
             }); 
 
             return statistics.getScript();
