@@ -3,5 +3,5 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    createImport: (filePath, metadata_id, entityId) => ipcRenderer.invoke('createImport', filePath, metadata_id, entityId)
+    createImport: (filePath, metadata_id, entityId, existingDataMode) => ipcRenderer.invoke('createImport', filePath, metadata_id, entityId, existingDataMode)
 })

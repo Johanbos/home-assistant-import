@@ -9,3 +9,11 @@ body {
 #result {
   width: 100%;
 }
+
+textarea {
+  width: 100%;
+}
+
+.important {
+  font-weight: 700;
+}

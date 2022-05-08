@@ -98,7 +98,7 @@ class deviceSma {
         return valuekWh;
     }
 
-    async script(metadata_id, entityId = null, ) {
+    async getStatistics(metadata_id, entityId) {
         try
         {
             // sma always has 1 entity in export
@@ -109,7 +109,7 @@ class deviceSma {
                 statistics.add(metadata_id, created, valuekWh);
             }); 
 
-            return statistics.getScript();
+            return statistics;
         } catch (error) {
             this.error = error;
         }

@@ -58,7 +58,7 @@ app.on('ready', () => {
   });  
 });
 
-async function createImport(event, filePath, metadata_id, entityId) {
+async function createImport(event, filePath, metadata_id, entityId, existingDataMode) {
   if (!filePath) {
     const { canceled, filePaths } = await dialog.showOpenDialog();
     if (canceled) {
@@ -67,6 +67,6 @@ async function createImport(event, filePath, metadata_id, entityId) {
     filePath = filePaths[0];
   }
 
-  const devices = new Devices(filePath);
+  const devices = new Devices(filePath, existingDataMode);
   return await devices.createImport(metadata_id, entityId);
 }

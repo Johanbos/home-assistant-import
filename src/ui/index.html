@@ -7,29 +7,54 @@
   </head>
   <body>
     <h1>Home Assistant Import</h1>
-      <h2>Install & open SQLite Web</h2>
-      Install <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>
-      and run this query to find out the Id of the sensor.
-      <textarea>SELECT id, statistic_id, unit_of_measurement FROM "statistics_meta"</textarea>
-      <input id="metadataId" type="number" value="1" />
-      <h2>Select a file to analyze</h2>
-      <button id="openFile">Open file</button>
-      <div>
-        <label for="filePath">FilePath</label>
-        <span id="filePath"></span><br />
-        <label for="message">Message</label>
-        <span id="message"></span><br />
-      </div>
-
-      <h2>Select an entity to import</h2>
-      <select id="entityId">
-      </select>
+      <h2>Install & gather information</h2>
+        <ol>
+          <li>Create a full backup of your instance.</li>
+          <li>Review your sql skills with <a href="https://www.w3schools.com/sql" target="blank">w3schools.com/sql</a> so you know that you are doing.</li>
+          <li>Install <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>.</li>
+          <li>Run this query to find out the Id of the sensor.<br />
+            <textarea>SELECT id, statistic_id, unit_of_measurement FROM "statistics_meta"</textarea>
+          </li>
+          <li>
+            Update the number with the Id of the sensor you want to update.<br />
+            <input id="metadataId" type="number" value="1" />
+          </li>
+          <li>
+            What would you like to do with existing data?<br/>
+            <select id="existingDataMode">
+              <option value="update">Update sum with total sum of history (sum is updated, can only be done once!)</option>
+              <option value="delete">Delete existing data</option>
+              <option value="none">Do nothing with existing data (sum may become incorrect)</option>
+            </select>
+          </li>
+        </ol>
+      
+      <h2>Create import scripts</h2>
+      <ol>
+        <li>
+          Select a file to analyze. <br />
+          <button id="openFile">Open file</button>
+        </li>
+        <li>File in use: <span class="important" id="filePath"></span></li>
+        <li>Messages from importer: <span class="important" id="message"></span></li>
+        <li>
+          Select an entity to import. <br/>
+          <select id="entityId">
+          </select>
+        </li>
+      </ol>
 
       <h2>Script to import</h2>
-      <textarea id="result"></textarea>
+      <ol>
+        <li>
+          Run all the queries one by one. <br />
+          <textarea rows="20" id="result"></textarea>
+        </li>
+      </ol>
+      
 
       <h2>Check out the results</h2>
-      Go to the Home Assisant energy dashboard and gop back in time. You should now see your history.
+      Go to the Home Assisant energy dashboard and go back in time. You should now see your history.
 
       <!-- always load the scrips as last -->
       <script src="./index.js"></script>

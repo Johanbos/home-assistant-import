@@ -16,6 +16,11 @@ document.getElementById('entityId').onchange = async (event) => {
     openFile(document.getElementById('filePath').innerHTML);
 }
 
+document.getElementById('existingDataMode').onchange = async (event) => {
+    event.preventDefault();
+    openFile(document.getElementById('filePath').innerHTML);
+}
+
 document.getElementById('metadataId').onchange = async (event) => {
     event.preventDefault();
     openFile(document.getElementById('filePath').innerHTML);
@@ -24,7 +29,8 @@ document.getElementById('metadataId').onchange = async (event) => {
 async function openFile(filePath = null) {
     const metadata_id = document.getElementById('metadataId').value;
     const entityId = document.getElementById('entityId').value;
-    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId);
+    const existingDataMode = document.getElementById('existingDataMode').value;
+    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId, existingDataMode);
     console.log('openFile', response);
     document.getElementById('message').innerHTML = response.message;
     document.getElementById('filePath').innerHTML = response.filePath;

@@ -1,4 +1,5 @@
 const Database = require('better-sqlite3');
+const Statistics = require('./statistics');
 
 class DeviceDomotics {
     constructor(filePath) {
@@ -86,9 +87,10 @@ group by DeviceRowID
         }
     }
 
-    async script(entityId) {
+    async getStatistics(entityId) {
         try {
-            console.log('sma script', entityId);
+            var statistics = new Statistics();
+            return statistics;
         } catch (error) {
             this.error = error;
         }

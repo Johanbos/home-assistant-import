@@ -24,16 +24,28 @@ class Statistics {
         this.lastStatistic = statistic;
     }
   
-    getScript() {
-        const deleteSql = `delete from statistics where metadata_id = ${this.lastStatistic.metadata_id} and created <= "${this.lastStatistic.created}"\n\n`;
-        const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${this.lastStatistic.metadata_id} and start > "${this.lastStatistic.start}"\n\n`;
-        const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${this.lastStatistic.metadata_id} and start > "${this.lastStatistic.start}"\n\n`;
-        const insertSql = 'insert into statistics (created, start, state, sum, metadata_id) values\n';
+    getScript(existingDataMode) {
+        const metadata_id = this.lastStatistic.metadata_id;
+        const start = this.lastStatistic.start;
+        let sql = 'insert into statistics (created, start, state, sum, metadata_id) values\n';
+        if (existingDataMode == 'update') {
+
+            const deleteSql1 = `delete from statistics where metadata_id = ${metadata_id} and start <= "${start}"\n\n`;
+            const deleteSql2 = `delete from statistics_short_term where metadata_id = ${metadata_id} and start <= "${start}"\n\n`;
+            const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
+            const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
+            sql = deleteSql1 + deleteSql2 + updateSql1 + updateSql2 + sql;
+        }
+        if (existingDataMode == 'delete') {
+            const deleteSql1 = `delete from statistics where metadata_id = ${metadata_id}\n\n`;
+            const deleteSql2 = `delete from statistics_short_term where metadata_id = ${metadata_id}\n\n`;
+            sql = deleteSql1 + deleteSql2 + sql;
+        }
         var resultSql = [];
         this.data.forEach(element => {
             resultSql.push(`("${element.created}", "${element.start}", ${element.state}, ${element.sum}, ${element.metadata_id})`);
         });
-        return deleteSql + updateSql1 + updateSql2 + insertSql + resultSql.join(',\n');
+        return sql + resultSql.join(',\n');
     }
 }
 
