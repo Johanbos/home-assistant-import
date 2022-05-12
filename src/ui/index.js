@@ -35,7 +35,7 @@ async function openFile(filePath = null) {
 
     // Display error if any
     if (response.error) {
-        document.getElementById('error').innerHTML = JSON.stringify(response.error);
+        document.getElementById('error').innerText = JSON.stringify(response.error, null, '\t');
         console.error(response.error);
     }
 
@@ -44,6 +44,7 @@ async function openFile(filePath = null) {
         var entityIdElement = document.getElementById('entityId');
 
         // Clear current options
+        const selectedIndex = entityIdElement.selectedIndex < 0 ? 0 : entityIdElement.selectedIndex;
         entityIdElement.options.length = 0;
 
         // Add new options
@@ -53,6 +54,9 @@ async function openFile(filePath = null) {
             option.text = `${element.DeviceName} (${element.TotalValues} values, from ${element.StartDate} with ${element.MinValues} to ${element.EndDate} with ${element.MaxValues})`;
             entityIdElement.add(option);
         });
+
+        // reselect option 
+        entityIdElement.selectedIndex = selectedIndex;
     }
 }
 

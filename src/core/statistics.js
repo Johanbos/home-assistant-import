@@ -14,11 +14,19 @@ class Statistics {
             if (this.validateDataOptions.includes(this.options.validateData)) {
                 if (this.lastStatistic) {
                     if (this.lastStatistic.state > value) {
-                        throw { message: 'Added value cannot be smaller then previous value', previousValue: this.lastStatistic.state, value }
+                        throw { 
+                            message: 'Added value cannot be smaller then previous value', 
+                            date, value, 
+                            lastStatistic: this.lastStatistic
+                        };
                     }
 
                     if (this.lastStatistic.start > date) {
-                        throw { message: 'Added date cannot be before previous date', previousDate: this.lastStatistic.start, date }
+                        throw { 
+                            message: 'Added date cannot be before previous date', 
+                            date, value,
+                            lastStatistic: this.lastStatistic
+                        };
                     }
 
                     sum = this.lastStatistic.sum + (value - this.lastStatistic.state);
