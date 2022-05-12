@@ -22,7 +22,7 @@ const createWindow = () => {
   });
 
   mainWindow.loadFile(path.join(__dirname, '/ui/index.html'));
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 };
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -58,7 +58,7 @@ app.on('ready', () => {
   });  
 });
 
-async function createImport(event, filePath, metadata_id, entityId, existingDataMode) {
+async function createImport(event, filePath, metadata_id, entityId, existingDataMode, transformValueMode) {
   if (!filePath) {
     const { canceled, filePaths } = await dialog.showOpenDialog();
     if (canceled) {
@@ -67,6 +67,6 @@ async function createImport(event, filePath, metadata_id, entityId, existingData
     filePath = filePaths[0];
   }
 
-  const devices = new Devices(filePath, existingDataMode);
+  const devices = new Devices(filePath, existingDataMode, transformValueMode);
   return await devices.createImport(metadata_id, entityId);
 }

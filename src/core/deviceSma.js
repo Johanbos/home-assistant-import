@@ -30,61 +30,55 @@ class deviceSma {
             if (!this.rawData.includes(header)) {
                 throw { message: 'Missing header', header };
             }
-
+            
             if (!this.data) {
                 throw { message: 'Missing data' };
             }
-
+            
             if (this.data.length == 0) {
                 throw { message: 'No records in data' };
             }
-
+            
             const first = this.data[0];
             const last = this.data[this.data.length-1];
             const startDate = this.transformDateTime(first[0]);
             const endDate = this.transformDateTime(last[0]);
             const minValues = this.transformValue(first[1]);
             const maxValues = this.transformValue(last[1]);
-
+            
             if (!startDate) {
                 throw { message: 'No startDate in data', first };
             }
-
+            
             if (!endDate) {
                 throw { message: 'No endDate in data', last };
             }
-
+            
             if (!minValues && minValues !== 0) {
                 throw { message: 'No minValues in data', first };
             }
-
+            
             if (!maxValues) {
                 throw { message: 'No maxValues in data', last };
             }
-
+            
             return true;
         } catch (error) {
-            console.error(error);
             this.error = error;
-            return false;
+            return false;   
         }
     }
-
+    
     async entities() {
-        try
-        {
-            const first = this.data[0];
-            const last = this.data[this.data.length-1];
-            const startDate = this.transformDateTime(first[0]);
-            const endDate = this.transformDateTime(last[0]);
-            const totalValues = this.data.length;
-            const minValues = this.transformValue(first[1]);
-            const maxValues = this.transformValue(last[1]);
-            const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
-            return entities;
-        } catch (error) {
-            this.error = error;
-        }
+        const first = this.data[0];
+        const last = this.data[this.data.length-1];
+        const startDate = this.transformDateTime(first[0]);
+        const endDate = this.transformDateTime(last[0]);
+        const totalValues = this.data.length;
+        const minValues = this.transformValue(first[1]);
+        const maxValues = this.transformValue(last[1]);
+        const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
+        return entities;
     }
 
     transformDateTime(dateStr) {
@@ -98,21 +92,20 @@ class deviceSma {
         return valuekWh;
     }
 
-    async getStatistics(metadata_id, entityId) {
-        try
-        {
-            // sma always has 1 entity in export
-            var statistics = new Statistics();
-            this.data.forEach(element => {
-                let created = this.transformDateTime(element[0]);
-                let valuekWh = this.transformValue(element[1]);
-                statistics.add(metadata_id, created, valuekWh);
-            }); 
-
-            return statistics;
-        } catch (error) {
-            this.error = error;
+    async getStatistics(metadata_id, entityId, transformValueMode) {
+        if (transformValueMode != 'devide1000' ) {
+            throw { error: 'SMA Export always uses Wh to kWh conversion', transformValueMode }
         }
+        
+        // sma always has 1 entity in export
+        var statistics = new Statistics();
+        this.data.forEach(element => {
+            let created = this.transformDateTime(element[0]);
+            let valuekWh = this.transformValue(element[1], transformValueMode);
+            statistics.add(metadata_id, created, valuekWh);
+        });
+
+        return statistics;
     }
 }
 
