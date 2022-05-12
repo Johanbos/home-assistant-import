@@ -61,4 +61,4 @@ async function openFile(filePath = null) {
 }
 
 // KickStart; 
-openFile(`C:\\Users\\johan\\Desktop\\test.db`);
+//openFile(`C:\\Users\\johan\\Desktop\\test.db`);
