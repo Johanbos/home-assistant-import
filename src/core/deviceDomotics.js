@@ -83,13 +83,13 @@ group by DeviceRowID
         return entities;
     }
 
-    async getStatistics(metadata_id, entityId, transformValueMode) {
-        var statistics = new Statistics();
+    async getStatistics(metadata_id, entityId, options) {
+        var statistics = new Statistics(options);
         const sql = `select Date, Counter from Meter_Calendar where DeviceRowID = '${ entityId }' order by Date asc`
         const records = this.database.prepare(sql).all();
         records.forEach(record => {
             let counter = record.Counter;
-            switch(transformValueMode) {
+            switch(options.transformValueMode) {
                 case 'devide1000':
                     counter = record.Counter / 1000;
                   break; 

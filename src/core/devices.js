@@ -2,10 +2,9 @@ const DeviceDomotics = require('./deviceDomotics.js');
 const DeviceSma = require('./deviceSma.js');
 
 class Devices {
-    constructor(filePath, existingDataMode, transformValueMode) {
+    constructor(filePath, options) {
         this.filePath = filePath;
-        this.existingDataMode = existingDataMode;
-        this.transformValueMode = transformValueMode;
+        this.options = options;
     }
 
     async createImport(metadata_id, entityId) {
@@ -16,8 +15,8 @@ class Devices {
             if (await deviceDomotics.isMatch()) {
                 const entities = await deviceDomotics.entities();
                 const selectedEntityId = entityId ?? entities.at(0).EntityID;
-                const statistics = await deviceDomotics.getStatistics(metadata_id, selectedEntityId, this.transformValueMode);
-                const script = statistics.getScript(this.existingDataMode);
+                const statistics = await deviceDomotics.getStatistics(metadata_id, selectedEntityId, this.options);
+                const script = statistics.getScript(this.options);
                 return new ImportResponse(this.filePath, 'Found Domoticz', deviceDomotics.error, entities, selectedEntityId, script);
             }
             
@@ -25,8 +24,8 @@ class Devices {
             if (await deviceSma.isMatch()) {
                 const entities = await deviceSma.entities();
                 const selectedEntityId = entityId ?? entities.at(0).EntityID;
-                const statistics = await deviceSma.getStatistics(metadata_id, selectedEntityId, this.transformValueMode);
-                const script = statistics.getScript(this.existingDataMode);
+                const statistics = await deviceSma.getStatistics(metadata_id, selectedEntityId, this.options);
+                const script = statistics.getScript(this.options);
                 return new ImportResponse(this.filePath, 'Found SMA CSV Export', deviceSma.error, entities, selectedEntityId, script);
             }
 

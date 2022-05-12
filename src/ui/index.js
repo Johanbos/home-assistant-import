@@ -10,33 +10,23 @@ document.getElementById('openFile').onclick = async (event) => {
     event.preventDefault();
     openFile();
 }
-
-document.getElementById('entityId').onchange = async (event) => {
-    event.preventDefault();
-    openFile(document.getElementById('filePath').innerHTML);
-}
-
-document.getElementById('existingDataMode').onchange = async (event) => {
-    event.preventDefault();
-    openFile(document.getElementById('filePath').innerHTML);
-}
-
-document.getElementById('transformValueMode').onchange = async (event) => {
-    event.preventDefault();
-    openFile(document.getElementById('filePath').innerHTML);
-}
-
-document.getElementById('metadataId').onchange = async (event) => {
-    event.preventDefault();
-    openFile(document.getElementById('filePath').innerHTML);
-}
+const inputs = Array.from(document.getElementsByTagName('input')).concat(Array.from(document.getElementsByTagName('select')));
+inputs.forEach(element => {
+    element.onchange = async (event) => {
+        event.preventDefault();
+        openFile(document.getElementById('filePath').innerHTML);
+    }
+});
 
 async function openFile(filePath = null) {
     const metadata_id = document.getElementById('metadataId').value;
     const entityId = document.getElementById('entityId').value;
-    const existingDataMode = document.getElementById('existingDataMode').value;
-    const transformValueMode = document.getElementById('transformValueMode').value;
-    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId, existingDataMode, transformValueMode);
+    const options = {
+        existingDataMode: document.getElementById('existingDataMode').value,
+        transformValueMode: document.getElementById('transformValueMode').value,
+        validateData: document.getElementById('validateData').value,
+    };
+    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId, options);
     console.log('openFile', response);
     document.getElementById('message').innerHTML = response.message;
     document.getElementById('error').innerHTML = '';
