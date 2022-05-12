@@ -1,35 +1,41 @@
 
 class Statistics {
-    constructor() {
+    constructor(options) {
        this.data = [];
        this.lastStatistic = null;
+       this.options = options;
+       this.validateDataOptions = ['validate', 'skip'];
     }
 
     add(metadata_id, date, value) {
         try {
-            var sum = 0; 
-            if (this.lastStatistic) {
-                if (this.lastStatistic.state > value) {
-                    throw { message: 'Added value cannot be smaller then previous value', previousValue: this.lastStatistic.state, value }
-                }
+            var sum = 0;
+            
+            if (this.validateDataOptions.includes(this.options.validateData)) {
+                if (this.lastStatistic) {
+                    if (this.lastStatistic.state > value) {
+                        throw { message: 'Added value cannot be smaller then previous value', previousValue: this.lastStatistic.state, value }
+                    }
 
-                if (this.lastStatistic.start > date) {
-                    throw { message: 'Added date cannot be before previous date', previousDate: this.lastStatistic.start, date }
-                }
+                    if (this.lastStatistic.start > date) {
+                        throw { message: 'Added date cannot be before previous date', previousDate: this.lastStatistic.start, date }
+                    }
 
-                sum = this.lastStatistic.sum + (value - this.lastStatistic.state);
+                    sum = this.lastStatistic.sum + (value - this.lastStatistic.state);
+                }
             }
-
             const statistic = new Statistic(metadata_id, date, date, value, sum);
             this.data.push(statistic);
             this.lastStatistic = statistic;
         } catch (error) {
-            // ignore this statistic
             console.error(error);
+            if (this.options.validateData == 'validate') {
+                throw error;
+            }
         }
     }
   
-    getScript(existingDataMode) {
+    getScript(options) {
         try {
             if (!this.lastStatistic) {
                 throw 'no data available'
@@ -38,7 +44,7 @@ class Statistics {
             const metadata_id = this.lastStatistic.metadata_id;
             const start = this.lastStatistic.start;
             let sql = '';
-            if (existingDataMode == 'update') {
+            if (options.existingDataMode == 'update') {
                 const deleteSql1 = `delete from statistics where metadata_id = ${metadata_id} and start <= "${start}"\n\n`;
                 const deleteSql2 = `delete from statistics_short_term where metadata_id = ${metadata_id} and start <= "${start}"\n\n`;
                 const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
@@ -46,7 +52,7 @@ class Statistics {
                 sql = sql + deleteSql1 + deleteSql2 + updateSql1 + updateSql2;
             }
             
-            if (existingDataMode == 'delete') {
+            if (options.existingDataMode == 'delete') {
                 const deleteSql1 = `delete from statistics where metadata_id = ${metadata_id}\n\n`;
                 const deleteSql2 = `delete from statistics_short_term where metadata_id = ${metadata_id}\n\n`;
                 sql = sql + deleteSql1 + deleteSql2;
