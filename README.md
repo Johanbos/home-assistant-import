@@ -1,4 +1,4 @@
-# Home Assisant Import
+# Home Assistant Import
 
 Hi, welcome to my attempt at importing data into Home Assistant. The Goal is to import data from
 
