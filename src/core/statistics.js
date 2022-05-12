@@ -31,7 +31,6 @@ class Statistics {
                 }
             }
             
-            console.log(sum);
             const statistic = new Statistic(metadata_id, date, date, value, sum);
             this.data.push(statistic);
             this.lastStatistic = statistic;
