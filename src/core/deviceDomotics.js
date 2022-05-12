@@ -93,7 +93,7 @@ group by DeviceRowID
                 const deviceRowID = entityOptions[2];
                 sql = `select Date, ${ counter } as Counter from MultiMeter_Calendar where DeviceRowID = ${ deviceRowID } and ${ counter } <> 0 order by Date asc`
             }
-            console.log('sql', sql);
+            
             const records = this.database.prepare(sql).all();
             records.forEach(record => {
                 let counter = record.Counter;
@@ -101,9 +101,9 @@ group by DeviceRowID
                     case 'devide1000':
                         counter = record.Counter / 1000;
                         break; 
-                        case 'multiply1000':
-                    counter = record.Counter * 1000;
-                    break;
+                    case 'multiply1000':
+                        counter = record.Counter * 1000;
+                        break;
                 } 
             
                 statistics.add(metadata_id, record.Date + ' 02:00:00.000000', counter);
