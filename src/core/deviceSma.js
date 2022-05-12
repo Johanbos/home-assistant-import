@@ -92,16 +92,18 @@ class deviceSma {
         return valuekWh;
     }
 
-    async getStatistics(metadata_id, entityId, transformValueMode) {
-        if (transformValueMode != 'devide1000' ) {
+    async getStatistics(metadata_id, entityId, options) {
+        if (options.transformValueMode != 'devide1000' ) {
             throw { error: 'SMA Export always uses Wh to kWh conversion', transformValueMode }
         }
         
         // sma always has 1 entity in export
-        var statistics = new Statistics();
+        var statistics = new Statistics(options);
+        console.log(1);
         this.data.forEach(element => {
+            console.log(element);
             let created = this.transformDateTime(element[0]);
-            let valuekWh = this.transformValue(element[1], transformValueMode);
+            let valuekWh = this.transformValue(element[1]);
             statistics.add(metadata_id, created, valuekWh);
         });
 
