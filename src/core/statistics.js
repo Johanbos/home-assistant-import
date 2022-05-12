@@ -9,18 +9,11 @@ class Statistics {
 
     add(metadata_id, date, value) {
         try {
-            var sum = 0;
+            let sum = 0;
             
-            if (this.validateDataOptions.includes(this.options.validateData)) {
-                if (this.lastStatistic) {
-                    if (this.lastStatistic.state > value) {
-                        throw { 
-                            message: 'Added value cannot be smaller then previous value', 
-                            date, value, 
-                            lastStatistic: this.lastStatistic
-                        };
-                    }
-
+            if (this.lastStatistic) {
+                // Validate
+                if (this.validateDataOptions.includes(this.options.validateData)) {
                     if (this.lastStatistic.start > date) {
                         throw { 
                             message: 'Added date cannot be before previous date', 
@@ -28,10 +21,17 @@ class Statistics {
                             lastStatistic: this.lastStatistic
                         };
                     }
+                }
 
+                // If the new value is higher, add to sum
+                if (this.lastStatistic.state < value) {
                     sum = this.lastStatistic.sum + (value - this.lastStatistic.state);
+                } else {
+                    sum = this.lastStatistic.sum;
                 }
             }
+            
+            console.log(sum);
             const statistic = new Statistic(metadata_id, date, date, value, sum);
             this.data.push(statistic);
             this.lastStatistic = statistic;
@@ -53,11 +53,9 @@ class Statistics {
             const start = this.lastStatistic.start;
             let sql = '';
             if (options.existingDataMode == 'update') {
-                const deleteSql1 = `delete from statistics where metadata_id = ${metadata_id} and start <= "${start}"\n\n`;
-                const deleteSql2 = `delete from statistics_short_term where metadata_id = ${metadata_id} and start <= "${start}"\n\n`;
-                const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
-                const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
-                sql = sql + deleteSql1 + deleteSql2 + updateSql1 + updateSql2;
+                const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
+                const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
+                sql = sql + updateSql1 + updateSql2;
             }
             
             if (options.existingDataMode == 'delete') {
@@ -69,7 +67,7 @@ class Statistics {
             const insertSql = 'insert into statistics (created, start, state, sum, metadata_id) values\n';
             var resultSql = [];
             this.data.forEach(element => {
-                resultSql.push(`("${element.created}", "${element.start}", ${element.state}, ${element.sum}, ${element.metadata_id})`);
+                resultSql.push(`("${element.created}", "${element.start}", ${element.state.toFixed(3)}, ${element.sum.toFixed(3)}, ${element.metadata_id})`);
             });
             return sql + insertSql + resultSql.join(',\n');
         } catch (error) {
