@@ -21,6 +21,11 @@ document.getElementById('existingDataMode').onchange = async (event) => {
     openFile(document.getElementById('filePath').innerHTML);
 }
 
+document.getElementById('transformValueMode').onchange = async (event) => {
+    event.preventDefault();
+    openFile(document.getElementById('filePath').innerHTML);
+}
+
 document.getElementById('metadataId').onchange = async (event) => {
     event.preventDefault();
     openFile(document.getElementById('filePath').innerHTML);
@@ -30,14 +35,17 @@ async function openFile(filePath = null) {
     const metadata_id = document.getElementById('metadataId').value;
     const entityId = document.getElementById('entityId').value;
     const existingDataMode = document.getElementById('existingDataMode').value;
-    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId, existingDataMode);
+    const transformValueMode = document.getElementById('transformValueMode').value;
+    const response = await window.electronAPI.createImport(filePath, metadata_id, entityId, existingDataMode, transformValueMode);
     console.log('openFile', response);
     document.getElementById('message').innerHTML = response.message;
+    document.getElementById('error').innerHTML = '';
     document.getElementById('filePath').innerHTML = response.filePath;
     document.getElementById('result').value = response.script;
 
     // Display error if any
     if (response.error) {
+        document.getElementById('error').innerHTML = JSON.stringify(response.error);
         console.error(response.error);
     }
 
@@ -59,5 +67,4 @@ async function openFile(filePath = null) {
 }
 
 // KickStart; 
-//openFile(`C:\\Users\\johan\\Desktop\\test.db`);
-openFile(`C:\\Users\\johan\\Desktop\\SUNNY_TRIPOWER_4.0_3006315744_Daily_2022_05_08_08_15_01.csv`);
+openFile(`C:\\Users\\johan\\Desktop\\test.db`);

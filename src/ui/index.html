@@ -13,7 +13,12 @@
           <li>Review your sql skills with <a href="https://www.w3schools.com/sql" target="blank">w3schools.com/sql</a> so you know that you are doing.</li>
           <li>Install <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>.</li>
           <li>Run this query to find out the Id of the sensor.<br />
-            <textarea>SELECT id, statistic_id, unit_of_measurement FROM "statistics_meta"</textarea>
+            <textarea rows="5">
+SELECT sm.Id, sm.statistic_id, sm.unit_of_measurement, min(s.start) start, min(s.state) state, min(s.sum) sum
+FROM "statistics" s
+join statistics_meta sm on sm.id = s.metadata_id and has_sum = true
+group by sm.Id, sm.statistic_id, sm.unit_of_measurement
+            </textarea>
           </li>
           <li>
             Update the number with the Id of the sensor you want to update.<br />
@@ -36,10 +41,18 @@
           <button id="openFile">Open file</button>
         </li>
         <li>File in use: <span class="important" id="filePath"></span></li>
-        <li>Messages from importer: <span class="important" id="message"></span></li>
+        <li>Analysis: <span class="important" id="message"></span> <span class="error" id="error"></span></li>
         <li>
           Select an entity to import. <br/>
           <select id="entityId">
+          </select>
+        </li>
+        <li>
+          Select a multiplier for the value. <br />
+          <select id="transformValueMode">
+            <option value="devide1000">value / 1000 (Wh -> kWh, dm3 -> m3)</option>
+            <option value="multiply1000">value * 1000 (kWh -> Wh, m3 -> dm3)</option>
+            <option value="none">Do nothing with existing value</option>
           </select>
         </li>
       </ol>
