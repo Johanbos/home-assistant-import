@@ -22,7 +22,7 @@ const createWindow = () => {
   });
 
   mainWindow.loadFile(path.join(__dirname, '/ui/index.html'));
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // Quit when all windows are closed, except on macOS. There, it's common

@@ -77,7 +77,7 @@ class deviceSma {
         const totalValues = this.data.length;
         const minValues = this.transformValue(first[1]);
         const maxValues = this.transformValue(last[1]);
-        const entities = [{ EntityID: 1, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
+        const entities = [{ EntityID: '1', selected: true, DeviceName: 'SMA', StartDate: startDate, EndDate: endDate, TotalValues: totalValues, MinValues: minValues, MaxValues: maxValues }];
         return entities;
     }
 

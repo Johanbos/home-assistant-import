@@ -37,7 +37,7 @@ class DeviceDomotics {
 
     async entities() {
         const entitiesSql =
-`select m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
+`select '' || m.DeviceRowID EntityID, h.Name || ' ' || d.Name DeviceName, min(m.Date) StartDate, max(m.Date) EndDate, count(*) TotalValues, min(m.Counter) MinValues, max(m.Counter) MaxValues
 from Meter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -45,7 +45,7 @@ group by m.DeviceRowID
 
 union all
 
-select 'mm1-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
+select 'mm-1-' || m.DeviceRowID, h.Name || ' ' || d.Name || ' (tariff1 consumption)', min(m.Date), max(m.Date),count(*), min(m.Counter1), max(m.Counter1)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -54,7 +54,7 @@ group by DeviceRowID
 
 union all
 
-select 'mm2-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
+select 'mm-2-' || m.DeviceRowID, h.Name || ' ' || d.Name || ' (tariff1 production)', min(m.Date), max(m.Date),count(*), min(m.Counter2), max(m.Counter2)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -63,7 +63,7 @@ group by DeviceRowID
 
 union all
 
-select 'mm3-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
+select 'mm-3-' || m.DeviceRowID, h.Name || ' ' || d.Name || ' (tariff2 consumption)', min(m.Date), max(m.Date),count(*), min(m.Counter3), max(m.Counter3)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -72,7 +72,7 @@ group by DeviceRowID
 
 union all
 
-select 'mm4-' || m.DeviceRowID, h.Name || ' ' || d.Name, min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
+select 'mm-4-' || m.DeviceRowID, h.Name || ' ' || d.Name || ' (tariff2 production)', min(m.Date), max(m.Date),count(*), min(m.Counter4), max(m.Counter4)
 from MultiMeter_Calendar m 
 left join DeviceStatus d on d.ID = m.DeviceRowID
 left join Hardware h on h.ID = d.HardwareID
@@ -85,21 +85,33 @@ group by DeviceRowID
 
     async getStatistics(metadata_id, entityId, options) {
         var statistics = new Statistics(options);
-        const sql = `select Date, Counter from Meter_Calendar where DeviceRowID = '${ entityId }' order by Date asc`
-        const records = this.database.prepare(sql).all();
-        records.forEach(record => {
-            let counter = record.Counter;
-            switch(options.transformValueMode) {
-                case 'devide1000':
-                    counter = record.Counter / 1000;
-                  break; 
-                case 'multiply1000':
-                    counter = record.Counter * 1000;
-                  break;
-            } 
+        try {
+            let sql = `select Date, Counter from Meter_Calendar where DeviceRowID = '${ entityId }' order by Date asc`
+            if (entityId.startsWith('mm')) {
+                const entityOptions = entityId.split('-');
+                const counter = 'counter' + entityOptions[1];
+                const deviceRowID = entityOptions[2];
+                sql = `select Date, ${ counter } as Counter from MultiMeter_Calendar where DeviceRowID = ${ deviceRowID } and ${ counter } <> 0 order by Date asc`
+            }
             
-            statistics.add(metadata_id, record.Date + ' 02:00:00.000000', counter);
-        });
+            const records = this.database.prepare(sql).all();
+            records.forEach(record => {
+                let counter = record.Counter;
+                switch(options.transformValueMode) {
+                    case 'devide1000':
+                        counter = record.Counter / 1000;
+                        break; 
+                    case 'multiply1000':
+                        counter = record.Counter * 1000;
+                        break;
+                } 
+            
+                statistics.add(metadata_id, record.Date + ' 02:00:00.000000', counter);
+            });
+        } catch (error) {
+            this.error = error;
+        }
+
         return statistics;
     }
 }

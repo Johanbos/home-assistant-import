@@ -50,7 +50,6 @@ group by sm.Id, sm.statistic_id, sm.unit_of_measurement
           <button id="openFile">Open file</button>
         </li>
         <li>File in use: <span class="important" id="filePath"></span></li>
-        <li>Analysis: <span class="important" id="message"></span> <span class="error" id="error"></span></li>
         <li>
           Select an entity to import. <br/>
           <select id="entityId">
@@ -63,6 +62,10 @@ group by sm.Id, sm.statistic_id, sm.unit_of_measurement
             <option value="multiply1000">value * 1000 (kWh -> Wh, m3 -> dm3)</option>
             <option value="none">Do nothing with existing value</option>
           </select>
+        </li>
+        <li>
+          Analysis: <span class="important" id="message"></span><br/>
+          <span class="error" id="error"></span>
         </li>
       </ol>
 
