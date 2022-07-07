@@ -9,11 +9,15 @@ At this point the import tool is usable, but you have to be somethat of a techy 
 
 [![CI](https://github.com/Johanbos/home-assistant-import/actions/workflows/release.yml/badge.svg)](https://github.com/Johanbos/home-assistant-import/actions/workflows/release.yml)
 
+![image](https://user-images.githubusercontent.com/6775602/177726351-c687a04c-0a07-4c3b-9bf9-7d60b65941c9.png)  
+_I could look at these charts like.. forever_ :heart:
 
 ## Home Assistant Community Add-on: SQLite Web
 This tool relies fully on the <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>. You need to have this installed and know a bit about SQL-queries before continuing.
 
 ALWAYS create a backup before experimenting.
+
+There is also a thread on the [home-assistant community](https://community.home-assistant.io/t/import-domoticz-history/162489/7) about importing history.
 
 ## Importing Domoticz Meter & Multimeter values
 
