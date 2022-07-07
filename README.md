@@ -20,9 +20,13 @@ _I could look at these charts like.. forever_ :heart:
 3. ALWAYS create a backup before experimenting.
 
 4. Download a [release](https://github.com/Johanbos/home-assistant-import/releases) for linux or windows, unzip and (for Windows) run `Home Assistant Import.exe`. There is no need to compile the code yourself.
-  ![image](https://user-images.githubusercontent.com/6775602/177728592-cea4aefe-ebbe-4021-9887-c52806bbfebc.png)
 
-5. After starting the application some warnings may appear, because the application is not 'signed'. I have no certificate at the moment. If you trust the application, is up to you.
+![image](https://user-images.githubusercontent.com/6775602/177728592-cea4aefe-ebbe-4021-9887-c52806bbfebc.png)
+
+5. After starting the application some warnings may appear, because the application is not 'signed'. I have no certificate at the moment. If you trust the application, is up to you. On Windows click 'more info' and the 'Run Anyway'.
+
+![image](https://user-images.githubusercontent.com/6775602/177729704-61005c31-4e3e-496d-b4bd-97f66a2b08d2.png)
+
 
 6. Follow the steps in the application. Any red text indicates an error and means it will take more time to find out why this is happening.
 
