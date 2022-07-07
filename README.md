@@ -48,7 +48,8 @@ DD.MM.YYYY hh:mm:ss,[Wh],[Wh],[Wh],[Wh]
 ## Importing generic CSV
 
 A [request](https://github.com/Johanbos/home-assistant-import/issues/12) has been made to create a generic cvs importer. I have not started on this yet. The configurable parts would be:
-- delimiter
+
+- delimiter (if not a comma :D)
 - lines to skip
 - columns to read (date & value)
 - dateformat
