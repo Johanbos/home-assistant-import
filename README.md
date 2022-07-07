@@ -27,6 +27,32 @@ A specific configuration of the SMA CVS file is supported at this moment. Follow
 
 ![image](https://user-images.githubusercontent.com/6775602/168069333-ce77a5b3-f079-4861-983e-0957296efafa.png)
 
+### SMA CSV specifications
+
+SMA has a pretty bespoke specification, so in [deviceSma.js](https://github.com/Johanbos/home-assistant-import/blob/main/src/core/deviceSma.js) a lot or lines are being skipped and it has a custom dateformat. Only first two columns matter, the date and TotWhOut.
+
+```
+sep=,
+Version CSV3|Tool WebUI|Linebreaks CR/LF|Delimiter comma
+
+,SN: 1234567890,SN: 1234567890,SN: 1234567890,SN: 1234567890
+,SUNNY TRIPOWER 4.0,SUNNY TRIPOWER 4.0,SUNNY TRIPOWER 4.0,SUNNY TRIPOWER 4.0
+,1234567890,1234567890,1234567890,1234567890
+,Metering.TotWhOut,Metering.GridMs.TotWhOut,Metering.GridMs.TotWhIn,TotVal.TotCsmp
+,Analog,Analog,Analog,Analog
+DD.MM.YYYY hh:mm:ss,[Wh],[Wh],[Wh],[Wh]
+13.09.2019 02:00:00,0,0,0,NaN
+14.09.2019 02:00:00,14450,0,0,NaN
+```
+
+## Importing generic CSV
+
+A [request](https://github.com/Johanbos/home-assistant-import/issues/12) has been made to create a generic cvs importer. I have not started on this yet. The configurable parts would be:
+- delimiter
+- lines to skip
+- columns to read (date & value)
+- dateformat
+
 ## Why not an Home Assistant add-on?
 
 Creating an Electron app was on my cool-list. I just needed to try this one out :)
