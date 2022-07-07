@@ -12,12 +12,19 @@ At this point the import tool is usable, but you have to be somethat of a techy 
 ![image](https://user-images.githubusercontent.com/6775602/177726351-c687a04c-0a07-4c3b-9bf9-7d60b65941c9.png)  
 _I could look at these charts like.. forever_ :heart:
 
-## Home Assistant Community Add-on: SQLite Web
-This tool relies fully on the <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>. You need to have this installed and know a bit about SQL-queries before continuing.
+## How to start importing
+1. This tool relies fully on the <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>. You need to have this installed and know a bit about SQL-queries before continuing.
 
-ALWAYS create a backup before experimenting.
+2. There is also a thread on the [home-assistant community](https://community.home-assistant.io/t/import-domoticz-history/162489/7) about importing history.
 
-There is also a thread on the [home-assistant community](https://community.home-assistant.io/t/import-domoticz-history/162489/7) about importing history.
+3. ALWAYS create a backup before experimenting.
+
+4. Download a [release](https://github.com/Johanbos/home-assistant-import/releases) for linux or windows, unzip and (for Windows) run `Home Assistant Import.exe`. There is no need to compile the code yourself.
+  ![image](https://user-images.githubusercontent.com/6775602/177728592-cea4aefe-ebbe-4021-9887-c52806bbfebc.png)
+
+5. After starting the application some warnings may appear, because the application is not 'signed'. I have no certificate at the moment. If you trust the application, is up to you.
+
+6. Follow the steps in the application. Any red text indicates an error and means it will take more time to find out why this is happening.
 
 ## Importing Domoticz Meter & Multimeter values
 
