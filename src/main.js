@@ -21,6 +21,10 @@ const createWindow = () => {
     }
   });
 
+  mainWindow.webContents.on('new-window', function(e, url) {
+    e.preventDefault();
+    require('electron').shell.openExternal(url);
+  });
   mainWindow.loadFile(path.join(__dirname, '/ui/index.html'));
   //mainWindow.webContents.openDevTools();
 };
