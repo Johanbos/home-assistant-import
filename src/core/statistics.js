@@ -52,8 +52,8 @@ class Statistics {
             const start = this.lastStatistic.start;
             let sql = '';
             if (options.existingDataMode == 'update') {
-                const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
-                const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start > "${start}"\n\n`;
+                const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start_ts > unixepoch("${start}")\n\n`;
+                const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start_ts > unixepoch("${start}")\n\n`;
                 sql = sql + updateSql1 + updateSql2;
             }
             
@@ -63,10 +63,10 @@ class Statistics {
                 sql = sql + deleteSql1 + deleteSql2;
             }
 
-            const insertSql = 'insert into statistics (created, start, state, sum, metadata_id) values\n';
+            const insertSql = 'insert into statistics (created_ts, start_ts, state, sum, metadata_id) values\n';
             var resultSql = [];
             this.data.forEach(element => {
-                resultSql.push(`("${element.created}", "${element.start}", ${element.state.toFixed(3)}, ${element.sum.toFixed(3)}, ${element.metadata_id})`);
+                resultSql.push(`(unixepoch("${element.created}"), unixepoch("${element.start}"), ${element.state.toFixed(3)}, ${element.sum.toFixed(3)}, ${element.metadata_id})`);
             });
             return sql + insertSql + resultSql.join(',\n');
         } catch (error) {
