@@ -1,7 +1,5 @@
 # Home Assistant Import with SQL scripts
 
-⚠️ The tool is currently incompatible with Home Assistant 2023.3.x and up. See https://github.com/Johanbos/home-assistant-import/issues/94 for more information. 
-
 Hi, welcome to my attempt at importing data into Home Assistant. The Goal is to import data from
 
 - Domoticz with P1/DMSR data (Version: 2020.2 (build 12497) Build Hash: c8f1e167e-modified)
