@@ -44,7 +44,8 @@
     "better-sqlite3": "^8.2.0",
     "csv-parse": "^5.3.6",
     "electron-squirrel-startup": "^1.0.0",
-    "jquery": "^3.6.4"
+    "jquery": "^3.6.4",
+    "node-abi": "^3.33.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.5",
@@ -53,7 +54,7 @@
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
     "@electron-forge/publisher-github": "^6.0.5",
-    "electron": "^20.3.12",
+    "electron": "^21.4.3",
     "electron-reloader": "^1.2.3"
   }
 }
