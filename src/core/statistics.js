@@ -14,9 +14,9 @@ class Statistics {
             if (this.lastStatistic) {
                 // Validate
                 if (this.validateDataOptions.includes(this.options.validateData)) {
-                    if (this.lastStatistic.start > date) {
+                    if (date <= this.lastStatistic.start) {
                         throw { 
-                            message: 'Added date cannot be before previous date', 
+                            message: 'Added date cannot be before or same as previous date', 
                             date, value,
                             lastStatistic: this.lastStatistic
                         };
