@@ -45,7 +45,7 @@
     "csv-parse": "^5.3.8",
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.6.4",
-    "node-abi": "^3.35.0"
+    "node-abi": "^3.40.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
