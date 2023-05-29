@@ -54,7 +54,7 @@
     "@electron-forge/maker-squirrel": "^6.1.1",
     "@electron-forge/maker-zip": "^6.1.1",
     "@electron-forge/publisher-github": "^6.1.1",
-    "electron": "^24.3.1",
+    "electron": "^24.4.0",
     "electron-reloader": "^1.2.3"
   }
 }
