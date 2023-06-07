@@ -31,7 +31,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.10.2
 
       - name: 'Set version number in package.json'
-        run: sed -i "s/0.0.1/${{ env.GitVersion_SemVer }}/g" package.json
+        run: sed -i "" "s/0.0.1/${{ env.GitVersion_SemVer }}/g" package.json
 
       - name: Install Dependencies
         run: npm clean-install
