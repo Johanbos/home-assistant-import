@@ -12,7 +12,7 @@ class Statistics {
             let sum = 0;
             
             if (this.options.endDate) {
-                if (date < this.options.endDate) {
+                if (date > this.options.endDate) {
                     return;
                 }
             }
