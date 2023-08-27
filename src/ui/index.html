@@ -21,26 +21,6 @@ join statistics_meta sm on sm.id = s.metadata_id and has_sum = true
 group by sm.Id, sm.statistic_id, sm.unit_of_measurement
             </textarea>
           </li>
-          <li>
-            Update the number with the Id of the sensor you want to update.<br />
-            <input id="metadataId" type="number" value="1" />
-          </li>
-          <li>
-            Validate, skip or add erroneous data?<br/>
-            <select id="validateData">
-              <option value="validate">The import will stop on erroneous data</option>
-              <option value="skip">The import will skip erroneous data</option>
-              <option value="">No validation is done and every value will be added</option>
-            </select>
-          </li>
-          <li>
-            What would you like to do with existing data?<br/>
-            <select id="existingDataMode">
-              <option value="update">Update sum with total sum of history (sum is updated, can only be done once!)</option>
-              <option value="delete">Delete existing data</option>
-              <option value="">Do nothing with existing data (sum may become incorrect)</option>
-            </select>
-          </li>
         </ol>
       
       <h2>Create import scripts</h2>
@@ -53,6 +33,31 @@ group by sm.Id, sm.statistic_id, sm.unit_of_measurement
         <li>
           Select an entity to import. <br/>
           <select id="entityId">
+          </select>
+        </li>
+        <li>
+          Id of the sensor you want to update.<br />
+          <input id="metadataId" type="number" value="1" />
+        </li>
+        <li>
+          Validate, skip or add erroneous data?<br/>
+          <select id="validateData">
+            <option value="validate">The script will stop on erroneous data</option>
+            <option value="skip">The script will skip erroneous data</option>
+            <option value="">No validation is done and every value will be added</option>
+          </select>
+        </li>
+        <li>
+          Specify an end date to prevent overlapping data.<br/>
+          <input id="endDate" type="date"></input>
+        </li>
+        <li>
+          What would you like to do with existing data?<br/>
+          Home Assistant stores <i>relative</i> data. Any current data started at value 0.<br/>
+          <select id="existingDataMode">
+            <option value="update">Update existing relative with total sum of imported values (overwriting existing data can only be done once!)</option>
+            <option value="delete">Delete existing data</option>
+            <option value="">Do nothing with existing data (next day value may become incorrect)</option>
           </select>
         </li>
         <li>

@@ -11,6 +11,12 @@ class Statistics {
         try {
             let sum = 0;
             
+            if (this.options.endDate) {
+                if (date > this.options.endDate) {
+                    return;
+                }
+            }
+
             if (this.lastStatistic) {
                 // Validate
                 if (this.validateDataOptions.includes(this.options.validateData)) {

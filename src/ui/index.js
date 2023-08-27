@@ -25,6 +25,7 @@ async function openFile(filePath = null) {
         existingDataMode: document.getElementById('existingDataMode').value,
         transformValueMode: document.getElementById('transformValueMode').value,
         validateData: document.getElementById('validateData').value,
+        endDate: document.getElementById('endDate').value,
     };
     const response = await window.electronAPI.createImport(filePath, metadata_id, entityId, options);
     console.log('openFile', response);
