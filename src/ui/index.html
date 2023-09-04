@@ -12,8 +12,8 @@
           <li>
             Create an export of the system you want to import from.
             <ul>
-              <li>It this is Domoticz, see <a href="https://www.domoticz.com/wiki/Application_Settings#Backup_.2F_Restore_Database">domoticz.com/wiki/Application_Settings#Backup_.2F_Restore_Database</a></li>
-              <li>It this is an SMA Inverter series, see <a href="https://manuals.sma.de/SI-12/en-US/3877479691.html">manuals.sma.de/SI-12/en-US/3877479691.html</a></li>
+              <li>It this is Domoticz, see <a href="https://www.domoticz.com/wiki/Application_Settings#Backup_.2F_Restore_Database" target="blank">domoticz.com/wiki/Application_Settings#Backup_.2F_Restore_Database</a></li>
+              <li>It this is an SMA Inverter series, see <a href="https://manuals.sma.de/SI-12/en-US/3877479691.html" target="blank">manuals.sma.de/SI-12/en-US/3877479691.html</a></li>
             </ul>
           </li>
           <li>Create a full backup of your Home Assistant instance.</li>
@@ -54,14 +54,14 @@ group by sm.Id, sm.statistic_id, sm.unit_of_measurement
           </select>
         </li>
         <li>
-          Specify an end date to prevent overlapping data.<br/>
+          Specify an end date to prevent overlapping data. Any data beyond this date is ignored.<br/>
           <input id="endDate" type="date"></input>
         </li>
         <li>
           What would you like to do with existing data?<br/>
-          Home Assistant stores <i>relative</i> data. Any current data started at value 0.<br/>
+          Home Assistant stores <i>relative</i> data, any current data started at value 0 even though your sensor is at value 12345.<br/>
           <select id="existingDataMode">
-            <option value="update">Update existing relative with total sum of imported values (overwriting existing data can only be done once!)</option>
+            <option value="update">Update existing values with total sum of imported values</option>
             <option value="delete">Delete existing data</option>
             <option value="">Do nothing with existing data (next day value may become incorrect)</option>
           </select>

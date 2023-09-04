@@ -12,7 +12,9 @@ class Statistics {
             let sum = 0;
             
             if (this.options.endDate) {
-                if (date > this.options.endDate) {
+                let currentDate = new Date(date);
+                let upperBound = new Date(this.options.endDate);
+                if (currentDate > upperBound) {
                     return;
                 }
             }
