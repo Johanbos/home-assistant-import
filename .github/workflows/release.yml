@@ -30,14 +30,14 @@ jobs:
       - name: Determine Version
         uses: gittools/actions/gitversion/execute@v0.10.2
 
-      - name: 'Set version number in package.json'
-        run: |
-          echo "Runner OS: $RUNNER_OS"
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            sed -i '' 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
-          else
-            sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
-          fi
+      - name: 'Set version number in package.json (MacOS)'
+        if: runner.os == 'macOS'
+        run: sed -i '' 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
+      
+      - name: 'Set version number in package.json (non-MacOS)'
+        if: runner.os != 'macOS'
+        run: sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
+        
       - name: Install Dependencies
         run: npm clean-install
 
