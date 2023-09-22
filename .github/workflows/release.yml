@@ -33,8 +33,11 @@ jobs:
       - name: 'Set version number in package.json'
         run: |
           echo "Runner OS: $RUNNER_OS"
-          sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
-
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            sed -i '' 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
+          else
+            sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
+          fi
       - name: Install Dependencies
         run: npm clean-install
 
