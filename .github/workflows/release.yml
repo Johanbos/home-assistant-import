@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -30,13 +30,8 @@ jobs:
       - name: Determine Version
         uses: gittools/actions/gitversion/execute@v0.10.2
 
-      - ${{ if ne(matrix.os, 'macos') }}:
-        - name: 'Set version number in package.json non-mac-os'
-          run: sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
-          
-      - ${{ if eq(matrix.os, 'macos') }}:
-        - name: 'Set version number in package.json mac-os'
-          run: sed -i '' 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
+      - name: 'Set version number in package.json'
+        run: sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
 
       - name: Install Dependencies
         run: npm clean-install
