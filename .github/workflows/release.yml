@@ -39,8 +39,11 @@ jobs:
         if: runner.os != 'macOS'
         run: sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
         
-      - name: Install Dependencies
+      - name: Install Dependencies 1/2
         run: npm clean-install
+
+      - name: Install Dependencies 2/2
+        run: pip install setuptools
 
       - name: Publish
         run: npm run publish
