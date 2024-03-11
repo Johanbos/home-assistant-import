@@ -18,18 +18,18 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
 
       - name: Install GitVersion
         id: gitversion
-        uses: gittools/actions/gitversion/setup@v0.10.2
+        uses: gittools/actions/gitversion/setup@main
         with:
           versionSpec: '5.x'
 
       - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v0.10.2
+        uses: gittools/actions/gitversion/execute@main
 
       - name: 'Set version number in package.json (MacOS)'
         if: runner.os == 'macOS'
