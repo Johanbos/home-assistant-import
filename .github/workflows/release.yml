@@ -42,6 +42,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm clean-install
+          python -m ensurepip
           pip install --upgrade setuptools
           python -c "import distutils"
 
