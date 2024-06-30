@@ -42,8 +42,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm clean-install
-          pip install setuptools
-          pip import setuptools.dist
+          pip3 install setuptools
 
       - name: Publish
         run: npm run publish
