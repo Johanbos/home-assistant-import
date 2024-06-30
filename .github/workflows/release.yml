@@ -28,6 +28,11 @@ jobs:
         with:
           versionSpec: '5.x'
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
       - name: Determine Version
         uses: gittools/actions/gitversion/execute@main
 
@@ -38,16 +43,11 @@ jobs:
       - name: 'Set version number in package.json (non-MacOS)'
         if: runner.os != 'macOS'
         run: sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
-        
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
 
       - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-distutils
+          apt-get update
+          apt-get install -y python3-distutils
           npm clean-install
           pip install --upgrade setuptools
 
