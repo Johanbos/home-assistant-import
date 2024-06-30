@@ -21,10 +21,11 @@
           <li>Install <a href="https://community.home-assistant.io/t/home-assistant-community-add-on-sqlite-web/68912" target="blank">Home Assistant Community Add-on: SQLite Web</a>.</li>
           <li>Run this query to find out the Id of the sensor.<br />
             <textarea rows="5">
-SELECT sm.Id, sm.statistic_id, sm.unit_of_measurement, min(s.start) start, min(s.state) state, min(s.sum) sum
+SELECT sm.statistic_id, sm.Id, sm.unit_of_measurement, min(s.start) start, min(s.state) state, min(s.sum) sum
 FROM "statistics" s
 join statistics_meta sm on sm.id = s.metadata_id and has_sum = true
 group by sm.Id, sm.statistic_id, sm.unit_of_measurement
+order by sm.statistic_id asc
             </textarea>
           </li>
         </ol>
@@ -83,7 +84,7 @@ group by sm.Id, sm.statistic_id, sm.unit_of_measurement
       <h2>Script to import</h2>
       <ol>
         <li>
-          Run all the queries one by one. <br />
+          Run the query blocks one by one when issues occur. Too much data (insert statements) could cause errors.<br />
           <textarea rows="20" id="result"></textarea>
         </li>
       </ol>
