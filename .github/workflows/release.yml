@@ -46,10 +46,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          apt-get update
-          apt-get install -y python3-distutils
-          npm clean-install
           pip install --upgrade setuptools
+          pip install wheel
+          npm clean-install
 
       - name: Publish
         run: npm run publish
