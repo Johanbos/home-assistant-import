@@ -39,12 +39,17 @@ jobs:
         if: runner.os != 'macOS'
         run: sed -i 's/0.0.1/${{ env.GitVersion_SemVer }}/' package.json
         
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
       - name: Install Dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-distutils
           npm clean-install
-          python -m ensurepip
           pip install --upgrade setuptools
-          python -c "import distutils"
 
       - name: Publish
         run: npm run publish
