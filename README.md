@@ -30,6 +30,8 @@ _I could look at these charts like.. forever_ :heart:
 
 6. Follow the steps in the application. Any red text indicates an error and means it will take more time to find out why this is happening.
 
+7. In Home Assistent it is possible to find and edit weird imported data in "Developer tools > Statistics". Find the sensor, click on the graph icon and see "Outliers". There you can adjust values.
+
 ## Importing Domoticz Meter & Multimeter values
 
 Any Meter & Multimeter values can be imported from Domoticz database file. Export the database directly from the dashboard. 
