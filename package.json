@@ -41,7 +41,7 @@
     }
   },
   "dependencies": {
-    "better-sqlite3": "^11.1.1",
+    "better-sqlite3": "^11.1.2",
     "csv-parse": "^5.5.6",
     "electron-squirrel-startup": "^1.0.1",
     "jquery": "^3.7.0",
