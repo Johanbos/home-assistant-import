@@ -52,7 +52,7 @@
     "@electron-forge/maker-deb": "^7.4.0",
     "@electron-forge/maker-rpm": "^7.4.0",
     "@electron-forge/maker-squirrel": "^7.4.0",
-    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.5.0",
     "@electron-forge/publisher-github": "^7.4.0",
     "electron": "^32.1.0",
     "electron-reloader": "^1.2.3"
