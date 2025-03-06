@@ -74,7 +74,7 @@ class Statistics {
             const insertSql = 'insert into statistics (created_ts, start_ts, state, sum, metadata_id) values\n';
             var resultSql = [];
             this.data.forEach(element => {
-                resultSql.push(`(unixepoch("${element.created}"), unixepoch("${element.start}"), ${element.state.toFixed(3)}, ${element.sum.toFixed(3)}, ${element.metadata_id})`);
+                resultSql.push(`(unixepoch("${element.created}", "utc"), unixepoch("${element.start}", "utc"), ${element.state.toFixed(3)}, ${element.sum.toFixed(3)}, ${element.metadata_id})`);
             });
             return sql + insertSql + resultSql.join(',\n');
         } catch (error) {

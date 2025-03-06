@@ -106,7 +106,7 @@ group by DeviceRowID
                         break;
                 } 
             
-                statistics.add(metadata_id, record.Date + ' 02:00:00.000000', counter);
+                statistics.add(metadata_id, record.Date, counter);
             });
         } catch (error) {
             this.error = error;
