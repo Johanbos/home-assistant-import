@@ -3,7 +3,7 @@
 Hi, welcome to my attempt at importing data into Home Assistant. The Goal is to import data from
 
 - Domoticz with P1/DMSR data (Version: 2020.2 (build 12497) Build Hash: c8f1e167e-modified)
-- SMA Inverter with Solar production data (version unknown)
+- SMA Inverter with Solar production data (firmware v2.x and above)
 
 At this point the import tool is usable, but you have to be somewhat of a techy to get the options right. This is not an add-on, but a tool that's creates SQL scripts that import data into Home Assistant. 
 
@@ -19,7 +19,7 @@ _I could look at these charts like.. forever_ :heart:
 
 3. ALWAYS create a backup before experimenting.
 
-4. Download a [release](https://github.com/Johanbos/home-assistant-import/releases) for linux or windows, unzip and (for Windows) run `Home Assistant Import.exe`. There is no need to compile the code yourself.
+4. Download a [release](https://github.com/Johanbos/home-assistant-import/releases) for mac, linux or windows. For Windows run `Home Assistant Import.exe`. There is no need to compile the code yourself.
 
 ![image](https://user-images.githubusercontent.com/6775602/177728592-cea4aefe-ebbe-4021-9887-c52806bbfebc.png)
 
