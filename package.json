@@ -44,7 +44,7 @@
     "better-sqlite3": "^12.6.0",
     "csv-parse": "^6.1.0",
     "electron-squirrel-startup": "^1.0.1",
-    "jquery": "^3.7.0",
+    "jquery": "^4.0.0",
     "node-abi": "^4.24.0"
   },
   "devDependencies": {
