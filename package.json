@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.8.0",
-    "csv-parse": "^6.1.0",
+    "csv-parse": "^6.2.1",
     "electron-squirrel-startup": "^1.0.1",
     "jquery": "^4.0.0",
     "node-abi": "^4.28.0"
