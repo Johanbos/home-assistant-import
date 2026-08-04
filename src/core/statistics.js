@@ -56,25 +56,34 @@ class Statistics {
                 throw 'no data available'
             }
                     
-            const metadata_id = this.lastStatistic.metadata_id;
-            const start = this.lastStatistic.start;
+            const metadata_id = parseInt(this.lastStatistic.metadata_id, 10);
+            if (isNaN(metadata_id)) {
+                throw 'invalid metadata_id';
+            }
+            const start = String(this.lastStatistic.start);
+            if (!/^[\d\-: T.Z+]+$/.test(start)) {
+                throw 'invalid start date';
+            }
             let sql = '';
             if (options.existingDataMode == 'update') {
-                const updateSql1 = `update statistics set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start_ts > unixepoch("${start}")\n\n`;
-                const updateSql2 = `update statistics_short_term set sum = sum + ${this.lastStatistic.sum.toFixed(3)} where metadata_id = ${metadata_id} and start_ts > unixepoch("${start}")\n\n`;
+                const updateSql1 = 'update statistics set sum = sum + ' + this.lastStatistic.sum.toFixed(3) + ' where metadata_id = ' + metadata_id + ' and start_ts > unixepoch("' + start + '")\n\n';
+                const updateSql2 = 'update statistics_short_term set sum = sum + ' + this.lastStatistic.sum.toFixed(3) + ' where metadata_id = ' + metadata_id + ' and start_ts > unixepoch("' + start + '")\n\n';
                 sql = sql + updateSql1 + updateSql2;
             }
             
             if (options.existingDataMode == 'delete') {
-                const deleteSql1 = `delete from statistics where metadata_id = ${metadata_id}\n\n`;
-                const deleteSql2 = `delete from statistics_short_term where metadata_id = ${metadata_id}\n\n`;
+                const deleteSql1 = 'delete from statistics where metadata_id = ' + metadata_id + '\n\n';
+                const deleteSql2 = 'delete from statistics_short_term where metadata_id = ' + metadata_id + '\n\n';
                 sql = sql + deleteSql1 + deleteSql2;
             }
 
             const insertSql = 'insert into statistics (created_ts, start_ts, state, sum, metadata_id) values\n';
             var resultSql = [];
             this.data.forEach(element => {
-                resultSql.push(`(unixepoch("${element.created}", "utc"), unixepoch("${element.start}", "utc"), ${element.state.toFixed(3)}, ${element.sum.toFixed(3)}, ${element.metadata_id})`);
+                const elemId = parseInt(element.metadata_id, 10);
+                const elemCreated = String(element.created);
+                const elemStart = String(element.start);
+                resultSql.push('(unixepoch("' + elemCreated + '", "utc"), unixepoch("' + elemStart + '", "utc"), ' + element.state.toFixed(3) + ', ' + element.sum.toFixed(3) + ', ' + elemId + ')');
             });
             return sql + insertSql + resultSql.join(',\n');
         } catch (error) {
