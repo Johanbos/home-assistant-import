@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout
@@ -48,11 +48,7 @@ jobs:
         run: |
           pip install --upgrade setuptools
           pip install wheel
-          npm ci --ignore-scripts
-
-      - name: Rebuild native modules (non-Windows)
-        if: runner.os != 'Windows'
-        run: npm rebuild
+          npm clean-install
 
       - name: Publish
         run: npm run publish
