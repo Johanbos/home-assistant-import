@@ -48,7 +48,11 @@ jobs:
         run: |
           pip install --upgrade setuptools
           pip install wheel
-          npm clean-install
+          npm ci --ignore-scripts
+
+      - name: Rebuild native modules (non-Windows)
+        if: runner.os != 'Windows'
+        run: npm rebuild
 
       - name: Publish
         run: npm run publish
